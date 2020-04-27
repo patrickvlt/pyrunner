@@ -64,14 +64,14 @@ exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py debug shell")
 # Returns exit code for GitLab and sends message to Slack or Pushbullet
 if exit_code > 0:
     print("Test Failed")
-    if thisPushbullet is not None:
+    if thisPushbullet is not None and thisPbchannel is not None:
         pushbullet = pushbullet.push_link(thisProject+": Testing Failed", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
     if thisSlack is not None:
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+fail_msg+'"}')
     sys.exit(1)
     exit()
 else:
-    if thisPushbullet is not None:
+    if thisPushbullet is not None and thisPbchannel is not None:
         pushbullet = pushbullet.push_link(thisProject+": Testing Succeeded", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
     if thisSlack is not None:
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+succeed_msg+'"}')
