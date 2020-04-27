@@ -13,6 +13,7 @@ customArgs.append('--branch=')
 customArgs.append('--author=')
 customArgs.append('--pushbullet=')
 customArgs.append('--slack=')
+customArgs.append('--pbchannel=')
 
 thisProject = None
 thisUrl = None
