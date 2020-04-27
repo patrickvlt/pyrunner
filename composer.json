@@ -1,0 +1,19 @@
+{
+    "name": "pveltrop/pyrunner",
+    "type": "library",
+    "description": "Python/Selenium testrunner",
+    "keywords": [
+        "testing",
+        "refactoring"
+    ],
+    "homepage": "https://pv-media.nl",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Patrick Veltrop",
+            "email": "patrick@jottenheijm.com",
+            "homepage": "https://pv-media.nl/",
+            "role": "Developer"
+        }
+    ]
+}

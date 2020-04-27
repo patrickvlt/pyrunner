@@ -1,0 +1,44 @@
+image: registry.gitlab.com/(group)/(repository)
+
+services:
+  - mysql:5.7
+  - python:3.8.2
+
+variables:
+  MYSQL_DATABASE: (database_name)
+  MYSQL_ROOT_PASSWORD: password
+  DB_HOST: mysql
+  DB_USERNAME: username
+
+stages:
+  - test
+
+Testing App:
+  stage: test
+  only: [merge_requests]
+  script:
+    - ln -s /laradock/vendor vendor
+    - composer install
+    - cp .env.testing .env
+    - php artisan key:generate
+    - php artisan config:clear
+    - php artisan migrate:fresh --seed
+    - php artisan migrate:rollback
+    - php artisan migrate:fresh --seed
+    - npm install
+    - apt-get update -q -y && apt-get install -y locales && locale-gen en_US.UTF-8
+    - apt-get install -y python-pip
+    - pip install pushbullet.py
+    - pip install -r vendor/pveltrop/pyrunner/requirements/requirements.txt
+    - php artisan serve --port=80 --env=testing --host=localhost & python vendor/pveltrop/pyrunner/_cicd.py --project=${CI_PROJECT_TITLE} --url=${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHA} --branch=${CI_COMMIT_REF_NAME} --author=${GITLAB_USER_EMAIL} --pushbullet=${PUSHBULLET} --slack=${SLACK} --pbchannel=${PBCHANNEL}
+
+  artifacts:
+    when: on_failure
+    name: "${CI_BUILD_STAGE}_${CI_BUILD_REF_NAME}_FAILED"
+    paths:
+      - "vendor/pveltrop/pyrunner/pyrunner"
+      - "vendor/pveltrop/pyrunner/"
+      - "pyrunner/pyrunner"
+      - "pyrunner/"
+    untracked: false
+    expire_in: 1 day

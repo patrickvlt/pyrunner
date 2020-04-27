@@ -1,0 +1,9 @@
+requests
+selenium
+colorama    
+chromedriver-py==80.0.3987.16
+Faker
+retrying
+xlwt
+xlrd
+ipdb
