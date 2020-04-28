@@ -89,7 +89,7 @@ php artisan migrate:fresh --seed --database=mysql_testing
 ```
 - Define TESTING_DB_DATABASE in your local, testing and example env.
 - Make sure your .env.testing isnt in production mode, production mode will halt artisan commands with interactions!
-
+- IMPORTANT: set TELESCOPE_ENABLED=false, otherwise migrations wont work currently
 
 ### Launching tests
 - Serve your project on localhost:80 with a testing .env, you can do this with:
