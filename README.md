@@ -1,3 +1,160 @@
+# Usage
+
+Go to the root of your project and exec:
+
+```
+python vendor/pveltrop/pyrunner/test_app.py
+```
+
+## Parameters
+
+```
+--debug
+```
+
+Shows more information during the execution of a browser command.
+
+```
+--dev
+```
+
+Launches the app and inserts a breakpoint. Meaning you get an interactive terminal, so you can test browser commands, or run a test individually.
+
+```
+--shell
+```
+
+This runs the tests in a terminal only. You won't see the browser.
+
+# Test Commands
+
+The test commands are in _init.py, to be used in tests:
+
+```
+pr.click(xpath,css,id)
+```
+
+The parameters are selectors for HTML elements. (right click in Chrome/Firefox)
+All three are optional, but the more you use, the more likely the click will succeed.
+
+```
+pr.switch_tab(index)
+```
+
+Switch the browser to the provided index.
+
+```
+pr.select_value_name(name, value)
+```
+
+Select an option in an HTML element, by value.
+
+```
+pr.select_index_name(name, index)
+```
+
+Select an option in an HTML element, by index.
+
+```
+pr.select_value_id(id, value)
+```
+
+Select an option in an HTML element, by value.
+
+```
+pr.select_index_id(id, index)
+```
+
+Select an option in an HTML element, by value.
+
+```
+pr.find_text(text)
+```
+
+Find text on the current page.
+
+```
+pr.find_id(id)
+```
+
+Try to find a VISIBLE element by ID.
+
+```
+pr.find_class(class)
+```
+
+Try to find a VISIBLE element by Class.
+
+```
+pr.find_css(css)
+```
+
+Try to find a VISIBLE element by CSS selector.
+
+```
+pr.find_name(name)
+```
+
+Try to find a VISIBLE element by Name.
+
+```
+pr.find_xpath(xpath)
+```
+
+Try to find a VISIBLE element by Xpath.
+
+## Typing
+
+```
+pr.type_xpath(xpath)
+```
+
+Try to type in an element selected by xpath.
+
+```
+pr.type_name(name)
+```
+
+Try to type in an element selected by name.
+
+```
+pr.type_id(id)
+```
+
+Try to type in an element selected by id.
+
+```
+pr.type_css(css)
+```
+
+Try to type in an element selected by css.
+
+```
+pr.change_text_xpath(xpath)
+```
+
+Try to clear and type text in an element selected by xpath.
+
+```
+pr.change_text_name(name)
+```
+
+Try to clear and type text in an element selected by name.
+
+```
+pr.change_text_id(id)
+```
+
+Try to clear and type text in an element selected by id.
+
+```
+pr.change_text_css(css)
+```
+
+Try to clear and type text in an element selected by css.
+
+# Installation
+
 ### Preparing the Docker image
 
 - Build a docker image for your project
