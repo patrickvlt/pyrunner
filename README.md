@@ -15,19 +15,19 @@ python vendor/pveltrop/pyrunner/test_app.py
 ## Parameters
 
 ```
---debug
+debug
 ```
 
 Shows more information during the execution of a browser command.
 
 ```
---dev
+dev
 ```
 
 Launches the app and inserts a breakpoint. Meaning you get an interactive terminal, so you can test browser commands, or run a test individually.
 
 ```
---shell
+shell
 ```
 
 This runs the tests in a terminal only. You won't see the browser.
