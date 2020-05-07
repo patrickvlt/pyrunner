@@ -28,8 +28,6 @@ This runs the tests in a terminal only. You won't see the browser.
 
 # Test Commands
 
-The test commands are in _init.py, to be used in tests:
-
 ```
 pr.click(xpath,css,id)
 ```
