@@ -3,6 +3,12 @@
 Go to the root of your project and exec:
 
 ```
+php artisan serve --port=80 --env=testing --host=localhost
+```
+
+And 
+
+```
 python vendor/pveltrop/pyrunner/test_app.py
 ```
 
