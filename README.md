@@ -3,6 +3,10 @@
 Go to the root of your project and exec:
 
 ```
+php artisan migrate:fresh --seed --database=mysql_testing
+```
+
+```
 php artisan serve --port=80 --env=testing --host=localhost
 ```
 
