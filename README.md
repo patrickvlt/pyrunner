@@ -1,5 +1,7 @@
 # Usage
 
+Download Python: https://www.python.org/downloads/release/python-381/
+
 Go to the root of your project and exec:
 
 ```
@@ -7,7 +9,7 @@ php artisan migrate:fresh --seed --database=mysql_testing
 ```
 
 ```
-php artisan serve --port=80 --env=testing --host=localhost
+php artisan serve --port=80 --host=localhost
 ```
 
 And 
@@ -19,16 +21,29 @@ python vendor/pveltrop/pyrunner/test_app.py
 ## Parameters
 
 ```
-debug
-```
-
-Shows more information during the execution of a browser command.
-
-```
 dev
 ```
 
 Launches the app and inserts a breakpoint. Meaning you get an interactive terminal, so you can test browser commands, or run a test individually.
+
+Keep in mind:
+
+When you run dev mode, and you want to use functions/tests from your test.py file, remember to append tests. to the function name. So for example:
+
+1. python vendor/pveltrop/pyrunner/test_app.py dev
+Will launch dev mode with a breakpoint, the terminal will show: 
+ipdb>
+2. So if you want to run the fake function in _tests.py, you run tests.fake(), NOT fake.():
+ipdb> tests.fake.email()
+'siennaschiffer@van.com'
+3. If you want to run a single test function, you run tests.name_of_test(), NOT name_of_test():
+ipdb> tests.name_of_test()
+
+```
+debug
+```
+
+Shows more information during the execution of a browser command.
 
 ```
 shell
@@ -187,6 +202,11 @@ package-lock.json
 ```
 composer require pveltrop/pyrunner
 ```
+
+```
+pip install -r vendor/pveltrop/pyrunner/requirements/requirements.txt
+```
+
 - Go to vendor/pveltrop/pyrunner
 - Copy _tests_example.py to your project root / and name it _tests.py
 
