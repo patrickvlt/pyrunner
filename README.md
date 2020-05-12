@@ -30,14 +30,24 @@ Keep in mind:
 
 When you run dev mode, and you want to use functions/tests from your test.py file, remember to append tests. to the function name. So for example:
 
-1. python vendor/pveltrop/pyrunner/test_app.py dev
-Will launch dev mode with a breakpoint, the terminal will show: 
+```
+python vendor/pveltrop/pyrunner/test_app.py dev
+```
+Will launch dev mode with a breakpoint, the terminal will show:
+```
 ipdb>
-2. So if you want to run the fake function in _tests.py, you run tests.fake(), NOT fake.():
+```
+So if you want to run the fake function in _tests.py, you run tests.fake(), NOT fake():
+```
 ipdb> tests.fake.email()
 'siennaschiffer@van.com'
-3. If you want to run a single test function, you run tests.name_of_test(), NOT name_of_test():
+```
+If you want to run a single test function, you run tests.name_of_test(), NOT name_of_test():
+```
 ipdb> tests.name_of_test()
+```
+
+This is because Python imports your test file separately and appends tests. to your function names.
 
 ```
 debug
