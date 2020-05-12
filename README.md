@@ -18,10 +18,10 @@ And
 python vendor/pveltrop/pyrunner/test_app.py
 ```
 
-## Parameters
+## dev Parameter
 
 ```
-dev
+python vendor/pveltrop/pyrunner/test_app.py dev
 ```
 
 Launches the app and inserts a breakpoint. Meaning you get an interactive terminal, so you can test browser commands, or run a test individually.
@@ -49,14 +49,17 @@ ipdb> tests.name_of_test()
 
 This is because Python imports your test file separately and appends tests. to your function names.
 
+## Other parameters
+
+
 ```
-debug
+python vendor/pveltrop/pyrunner/test_app.py dev debug
 ```
 
 Shows more information during the execution of a browser command.
 
 ```
-shell
+python vendor/pveltrop/pyrunner/test_app.py debug shell
 ```
 
 This runs the tests in a terminal only. You won't see the browser.
