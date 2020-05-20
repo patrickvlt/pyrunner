@@ -1,7 +1,8 @@
 requests
 selenium
 colorama    
-chromedriver-py==80.0.3987.16
+chromedriver-py
+pushbullet.py
 Faker
 retrying
 xlwt
