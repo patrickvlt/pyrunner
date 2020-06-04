@@ -1,7 +1,8 @@
 # Usage
 
 Download Python: https://www.python.org/downloads/release/python-381/
-Downlaod Pip: https://pip.pypa.io/en/stable/installing/
+
+Download Pip: https://pip.pypa.io/en/stable/installing/
 
 
 Go to the root of your project and exec:
