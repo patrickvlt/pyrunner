@@ -635,15 +635,7 @@ def failed(e):
         print(str(e))
         print('')
         print(' ')
-        if dev is not None:
-            print(' ')
-            print(Fore.CYAN+'Developing mode initialised')
-            print('You can run tests individually, or run commands in _tests.py to make a new test, step by step')
-            print('For example, try to run a test from the list in test_app.py, just type the following: tests.(name_of_your_test)()')
-            print('Or try to run a single command (located in _tests.py), for example: pr.click(element_to_click)'+Style.RESET_ALL)
-            print(' ')
-            ipdb.set_trace(context=1)
-        else:
+        if dev is None:
             browser.quit()
             sys.exit(1)
             exit()
