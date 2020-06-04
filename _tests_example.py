@@ -792,6 +792,7 @@ def RunTests():
         users_can_request_password()
         users_can_login()
         users_can_create_sending()
+        users_can_create_priority_sending()
         users_can_view_profile()
         users_can_crud_address()
         users_can_crud_contact()
@@ -802,4 +803,14 @@ def RunTests():
         users_can_approve_and_deny_sendings()
         admins_can_change_status_modal()
     except Exception as e:
-        pr.failed(e)
+        if pr.dev is not None:
+            print(' ')
+            print(' ')
+            print(pr.Fore.RED+str(e)+pr.Style.RESET_ALL)        
+            print(' ')
+            print(pr.Fore.CYAN+'Developing mode initialised')
+            print('You can run tests individually, or run commands in _tests.py to make a new test, step by step')
+            print('For example, try to run a test from the list in test_app.py, just type the following: (name_of_your_test)()')
+            print('Or try to run a single command (located in _tests.py), for example: pr.click(element_to_click)'+pr.Style.RESET_ALL)
+            print(' ')
+            pr.ipdb.set_trace(context=1)
