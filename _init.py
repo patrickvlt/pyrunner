@@ -637,12 +637,12 @@ def failed(e):
         print(' ')
         if dev is not None:
             print(' ')
-            print(pr.Fore.CYAN+'Developing mode initialised')
+            print(Fore.CYAN+'Developing mode initialised')
             print('You can run tests individually, or run commands in _tests.py to make a new test, step by step')
             print('For example, try to run a test from the list in test_app.py, just type the following: tests.(name_of_your_test)()')
-            print('Or try to run a single command (located in _tests.py), for example: pr.click(element_to_click)'+pr.Style.RESET_ALL)
+            print('Or try to run a single command (located in _tests.py), for example: pr.click(element_to_click)'+Style.RESET_ALL)
             print(' ')
-            pr.ipdb.set_trace(context=1)
+            ipdb.set_trace(context=1)
         else:
             browser.quit()
             sys.exit(1)
