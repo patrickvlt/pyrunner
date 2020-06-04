@@ -2,9 +2,11 @@
 # Python 3.8.1
 
 import os
+os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 import sys
 import requests
 from pushbullet import Pushbullet
+
 
 customArgs = []
 customArgs.append('--project=')
@@ -63,7 +65,7 @@ if thisPushbullet is not None and thisPbchannel is not None:
 def TestFailed():
     print("Test Failed")
     if thisPushbullet is not None and thisPbchannel is not None:
-        pushbullet = pushbullet.push_link(thisProject+": Testing Failed", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
+        pushbullet.push_link(thisProject+": Testing Failed", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
     if thisSlack is not None:
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+fail_msg+'"}')
     sys.exit(1)
@@ -71,7 +73,7 @@ def TestFailed():
     
 def TestSucceeded():
     if thisPushbullet is not None and thisPbchannel is not None:
-        pushbullet = pushbullet.push_link(thisProject+": Testing Succeeded", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
+        pushbullet.push_link(thisProject+": Testing Succeeded", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
     if thisSlack is not None:
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+succeed_msg+'"}')
     sys.exit(0)
@@ -79,8 +81,6 @@ def TestSucceeded():
             
 # Prepare Laravel
 try:
-    os.system('ln -s /laradock/vendor vendor')
-    os.system('composer install')
     os.system('cp .env.testing .env')
     os.system('php artisan key:generate')
     os.system('php artisan config:clear')
@@ -90,8 +90,6 @@ try:
     os.system('npm install')
     os.system('sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb')
     os.system('sudo apt install -y ./google-chrome-stable_current_amd64.deb')
-    os.system('pip install pushbullet.py')
-    os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 except Exception as e:
     print(e)
     TestFailed()
