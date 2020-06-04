@@ -58,12 +58,9 @@ if thisPushbullet is not None and thisPbchannel is not None:
     for channel in pb.channels:
         if str(thisPbchannel) in str(channel):
             pushbullet = channel
-
-# Run python file which runs defined test functions
-exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py debug shell")
-
+            
 # Returns exit code for GitLab and sends message to Slack or Pushbullet
-if exit_code > 0:
+def TestFailed():
     print("Test Failed")
     if thisPushbullet is not None and thisPbchannel is not None:
         pushbullet = pushbullet.push_link(thisProject+": Testing Failed", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
@@ -71,12 +68,40 @@ if exit_code > 0:
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+fail_msg+'"}')
     sys.exit(1)
     exit()
-else:
+    
+def TestSucceeded():
     if thisPushbullet is not None and thisPbchannel is not None:
         pushbullet = pushbullet.push_link(thisProject+": Testing Succeeded", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
     if thisSlack is not None:
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+succeed_msg+'"}')
     sys.exit(0)
     exit()
+            
+# Prepare Laravel
+try:
+    os.system('ln -s /laradock/vendor vendor')
+    os.system('composer install')
+    os.system('cp .env.testing .env')
+    os.system('php artisan key:generate')
+    os.system('php artisan config:clear')
+    os.system('php artisan migrate:fresh --seed')
+    os.system('php artisan migrate:rollback')
+    os.system('php artisan migrate:fresh --seed')
+    os.system('npm install')
+    os.system('sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb')
+    os.system('sudo apt install -y ./google-chrome-stable_current_amd64.deb')
+    os.system('pip install pushbullet.py')
+    os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
+except Exception as e:
+    print(e)
+    TestFailed()
+
+# Run python file which runs defined test functions
+exit_code = os.system("php artisan serve --port=80 --env=testing --host=localhost & python vendor/pveltrop/pyrunner/test_app.py debug shell")
+    
+if exit_code > 0:
+    TestFailed()
+else:
+    TestSucceeded()
 
 exit()
