@@ -621,25 +621,34 @@ def finished():
 
 
 def failed(e):
-    print(Style.RESET_ALL+' ')
-    print('----------------------------------------------------------------------------------------------------')
-    print(' ')
-    print('Aborted executing due to fail')
-    print('Execution runtime: '+str(datetime.now()-test_time))
-    try:
-        browser.save_screenshot('pyrunner/failed_pyrunner.png')
-    except:
-        browser.save_screenshot('failed_pyrunner.png')
-    print(' ')
-    print('----------------------------------------------------------------------------------------------------')
-    print(' ')
-    print(Fore.RED+'Failed at: '+str(current_test))
-    print(Style.RESET_ALL+'Step '+str(current_step-1)+": "+str(step_desc))
-    print(' ')
-    print(str(e))
-    print('')
-    print(' ')
-    if dev == False:
-        browser.quit()
-    sys.exit(1)
-    exit()
+    if dev is not None:
+        print(' ')
+        print(pr.Fore.CYAN+'Developing mode initialised')
+        print('You can run tests individually, or run commands in _tests.py to make a new test, step by step')
+        print('For example, try to run a test from the list in test_app.py, just type the following: tests.(name_of_your_test)()')
+        print('Or try to run a single command (located in _tests.py), for example: pr.click(element_to_click)'+pr.Style.RESET_ALL)
+        print(' ')
+        pr.ipdb.set_trace(context=1)
+    else:
+        print(Style.RESET_ALL+' ')
+        print('----------------------------------------------------------------------------------------------------')
+        print(' ')
+        print('Aborted executing due to fail')
+        print('Execution runtime: '+str(datetime.now()-test_time))
+        try:
+            browser.save_screenshot('pyrunner/failed_pyrunner.png')
+        except:
+            browser.save_screenshot('failed_pyrunner.png')
+        print(' ')
+        print('----------------------------------------------------------------------------------------------------')
+        print(' ')
+        print(Fore.RED+'Failed at: '+str(current_test))
+        print(Style.RESET_ALL+'Step '+str(current_step-1)+": "+str(step_desc))
+        print(' ')
+        print(str(e))
+        print('')
+        print(' ')
+        if dev == False:
+            browser.quit()
+        sys.exit(1)
+        exit()
