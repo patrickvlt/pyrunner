@@ -21,6 +21,8 @@ from retrying import retry
 from chromedriver_py import binary_path
 from xlwt import Workbook
 
+print('test')
+
 init()
 
 # -----------------------------------------------------------
