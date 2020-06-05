@@ -5,17 +5,27 @@ Download Python: https://www.python.org/downloads/release/python-381/
 Download Pip: https://pip.pypa.io/en/stable/installing/
 
 
-Go to the root of your project and exec:
+Go to the root of your project.
+
+Install latest requirements, chromedriver might have been adjusted due to delayed releases:
+
+```
+pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt
+```
+
+Prepare your (test) database:
 
 ```
 php artisan migrate:fresh --seed --database=mysql_testing
 ```
 
+Serve your project:
+
 ```
-php artisan serve --port=80 --host=localhost
+php artisan serve --port=80 --host=localhost --env=testing
 ```
 
-And 
+Run your tests: 
 
 ```
 python vendor/pveltrop/pyrunner/test_app.py
@@ -31,8 +41,6 @@ Launches the app and inserts a breakpoint. Meaning you get an interactive termin
 
 Keep in mind:
 
-When you run dev mode, and you want to use functions/tests from your test.py file, remember to append tests. to the function name. So for example:
-
 ```
 python vendor/pveltrop/pyrunner/test_app.py dev
 ```
@@ -40,17 +48,20 @@ Will launch dev mode with a breakpoint, the terminal will show:
 ```
 ipdb>
 ```
-So if you want to run the fake function in _tests.py, you run tests.fake(), NOT fake():
+So if you want to run the fake function in _tests.py, you run fake().name() (for example):
 ```
-ipdb> tests.fake.email()
+ipdb> fake.email()
 'siennaschiffer@van.com'
 ```
-If you want to run a single test function, you run tests.name_of_test(), NOT name_of_test():
+If you want to run a single test function, you run name_of_test():
 ```
-ipdb> tests.name_of_test()
+ipdb> name_of_test()
 ```
 
-This is because Python imports your test file separately and appends tests. to your function names.
+If you want to run all tests, and insert a breakpoint if it fails anywhere:
+```
+ipdb> RunTests()
+```
 
 ## Other parameters
 
@@ -220,7 +231,7 @@ composer require pveltrop/pyrunner
 ```
 
 ```
-pip install -r vendor/pveltrop/pyrunner/requirements/requirements.txt
+pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt
 ```
 
 - Go to vendor/pveltrop/pyrunner
