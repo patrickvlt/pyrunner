@@ -24,6 +24,8 @@ Testing App:
   - export LANGUAGE=en_US:en
   - export LC_ALL=en_US.UTF-8
   script:
+    - ln -s /laradock/vendor vendor
+    - composer install
     - python vendor/pveltrop/pyrunner/_cicd.py --project=${CI_PROJECT_TITLE} --url=${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHA} --branch=${CI_COMMIT_REF_NAME} --author=${GITLAB_USER_EMAIL} --pushbullet=${PUSHBULLET} --slack=${SLACK} --pbchannel=${PBCHANNEL}
 
   artifacts:
