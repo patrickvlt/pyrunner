@@ -802,6 +802,7 @@ def RunTests():
         admins_can_edit_sending()
         users_can_approve_and_deny_sendings()
         admins_can_change_status_modal()
+        pr.finished()
     except Exception as e:
         if pr.dev is not None:
             print(' ')
@@ -814,3 +815,5 @@ def RunTests():
             print('Or try to run a single command (located in _tests.py), for example: pr.click(element_to_click)'+pr.Style.RESET_ALL)
             print(' ')
             pr.ipdb.set_trace(context=1)
+        else:
+            pr.failed(e)
