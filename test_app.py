@@ -7,10 +7,11 @@ open('vendor/pveltrop/pyrunner/_init.py', 'wb').write(requests.get('https://raw.
 open('vendor/pveltrop/pyrunner/_cicd.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_cicd.py').content)
 
 # load tests and chromedriver
+print('foo')
 try:
     from importlib import reload
 except:
-    import importlib
+    print(' ')
 
 import _init as pr
 import _tests as test
