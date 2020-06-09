@@ -84,7 +84,7 @@ failProject = None
 step_desc = None
 current_test = None
     
-@retry(stop_max_attempt_number=1)
+@retry(stop_max_attempt_number=max_retries)
 def click(xpath=None, css=None, id=None):
     def Click(css, xpath, id):
         try:
