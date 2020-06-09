@@ -149,26 +149,26 @@ def click(xpath=None, css=None, id=None):
             except:
                 if debug is not None:
                     print('ID click failed with: ' + str(id))
-        try:
-            if debug is not None:
-                print('Trying to click with browser console and jQuery on: '+str(css))
-            browser.execute_script("$('"+css+"').click()")
-            if debug is not None:
-                print(Fore.GREEN+'Executed click with jQuery in console. '+Fore.RED+'However, this is a last resort method which doesnt always work!'+Style.RESET_ALL)
-            return
-        except:
-            if debug is not None:
-                print('jQuery click failed with: ' + str(css))
-        try:
-            if debug is not None:
-                print('Trying to click with browser console and jQuery on: '+str(css))
-            browser.execute_script("$('"+css+"')[0].click()")
-            if debug is not None:
-                print(Fore.GREEN+'Executed click with jQuery in console. '+Fore.RED+'However, this is a last resort method which doesnt always work!'+Style.RESET_ALL)
-            return
-        except:
-            print('jQuery click failed with: ' + str(css))
-            raise TypeError("Can't click this element.")
+                raise TypeError("Can't click this element.")
+#         try:
+#             if debug is not None:
+#                 print('Trying to click with browser console and jQuery on: '+str(css))
+#             browser.execute_script("$('"+css+"').click()")
+#             if debug is not None:
+#                 print(Fore.GREEN+'Executed click with jQuery in console. '+Fore.RED+'However, this is a last resort method which doesnt always work!'+Style.RESET_ALL)
+#             return
+#         except:
+#             if debug is not None:
+#                 print('jQuery click failed with: ' + str(css))
+#         try:
+#             if debug is not None:
+#                 print('Trying to click with browser console and jQuery on: '+str(css))
+#             browser.execute_script("$('"+css+"')[0].click()")
+#             if debug is not None:
+#                 print(Fore.GREEN+'Executed click with jQuery in console. '+Fore.RED+'However, this is a last resort method which doesnt always work!'+Style.RESET_ALL)
+#             return
+#         except:
+#             print('jQuery click failed with: ' + str(css))
     Click(css, xpath, id)
 
 @retry(stop_max_attempt_number=max_retries)
