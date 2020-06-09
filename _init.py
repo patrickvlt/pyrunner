@@ -149,7 +149,7 @@ def click(xpath=None, css=None, id=None):
             except:
                 if debug is not None:
                     print('ID click failed with: ' + str(id))
-                raise TypeError("Can't click this element.")
+                raise TypeError("Can't click this element: "+str(id)+".")
     Click(css, xpath, id)
 
 @retry(stop_max_attempt_number=max_retries)
