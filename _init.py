@@ -63,7 +63,7 @@ if shell is not None:
     if dev is not None:
         max_retries = 0
     else:
-        max_retries = 2
+        max_retries = 3
 else:
     options = None
     max_retries = 0
