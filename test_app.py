@@ -7,7 +7,11 @@ open('vendor/pveltrop/pyrunner/_init.py', 'wb').write(requests.get('https://raw.
 open('vendor/pveltrop/pyrunner/_cicd.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_cicd.py').content)
 
 # load tests and chromedriver
-from importlib import reload
+try:
+    from importlib import reload
+except:
+    import importlib
+
 import _init as pr
 import _tests as test
 
@@ -28,11 +32,11 @@ def DevMode():
     print(' ')
     pr.ipdb.set_trace(context=1)
 
-def Reload():
-    reload(test)
-
 def RunTests():
-    reload(test)
+    try:
+        reload(test)
+    except:
+        importlib.reload(test) 
     try:
         test.RunTests()
         pr.finished()
