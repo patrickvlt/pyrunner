@@ -32,6 +32,8 @@ def DevMode():
     print(' ')
     pr.ipdb.set_trace(context=1)
 
+print('foo2')
+    
 def RunTests():
     try:
         reload(test)
