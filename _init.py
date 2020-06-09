@@ -645,6 +645,7 @@ def failed(e):
         print('')
         print(' ')
         browser.save_screenshot('pyrunner/failed_state.png')
+        time.sleep(5)
         if shell is not None:
             with ZipFile('pyrunner.zip', 'w') as zipObj:
             # Iterate over all the files in directory
