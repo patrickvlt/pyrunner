@@ -2,7 +2,6 @@ image: registry.gitlab.com/(group)/(repo)
 
 services:
   - mysql:5.7
-  - python:3.8.2
 
 variables:
   MYSQL_DATABASE: test_name

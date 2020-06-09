@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-os.system('pip3 install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
+os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 import sys
 import requests
 from pushbullet import Pushbullet
