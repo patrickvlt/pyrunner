@@ -13,6 +13,8 @@ import re
 import glob
 import xlwt
 import ipdb 
+import shutil
+
 from datetime import datetime
 from datetime import date
 from selenium import webdriver
@@ -22,6 +24,9 @@ from chromedriver_py import binary_path
 from xlwt import Workbook
 
 init()
+
+shutil.rmtree('pyrunner', ignore_errors=True)
+os.system('mkdir pyrunner')
 
 # -----------------------------------------------------------
 # Set Up Browser
@@ -65,13 +70,13 @@ browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
 browser.get('http://localhost/')
 browser.maximize_window()
-    
 
 # -----------------------------------------------------------
 # Functions which execute browser commands
 # -----------------------------------------------------------
     
 current_step = 0
+current_cmd = 0
 test_time=datetime.now()
 failProject = None
 step_desc = None
@@ -569,12 +574,14 @@ def fetch_test_list(printTests=None, generateTests=None):
 
 def step(describe):
     global current_step
+    global current_cmd
     global step_desc
     step_desc = describe
+    current_cmd = current_cmd + 1
+    browser.save_screenshot('pyrunner/'+str(current_cmd)+' - '+describe+'.png')
     if describe is not None:
         print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
         current_step = current_step + 1
-
 
 def start(describe):
     global current_step
