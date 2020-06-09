@@ -588,6 +588,7 @@ def step(describe):
 def start(describe):
     global current_step
     global current_test
+    browser.save_screenshot('pyrunner/Starting: '+str(describe)+'.png')
     current_step = 1
     if describe is not None:
         current_test = describe
@@ -603,6 +604,7 @@ def start(describe):
 
 def end(describe):
     if describe is not None:
+        browser.save_screenshot('pyrunner/Ending: '+str(describe)+'.png')
         print(Fore.GREEN+'')
         print(' ')
         print('----------------------------------------------------------------------------------------------------')
