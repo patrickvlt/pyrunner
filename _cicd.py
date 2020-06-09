@@ -81,7 +81,6 @@ def TestSucceeded():
             
 # Prepare Laravel
 try:
-    print('foo')
     os.system('cp .env.testing .env')
     os.system('php artisan key:generate')
     os.system('php artisan config:clear')
