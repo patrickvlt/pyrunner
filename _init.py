@@ -561,8 +561,9 @@ def step(describe):
     global step_desc
     step_desc = describe
     current_cmd = current_cmd + 1
-    browser.save_screenshot('pyrunner/'+str(current_cmd)+' - '+describe+'.png')
     if describe is not None:
+        if shell is not None:
+            browser.save_screenshot('pyrunner/'+str(current_cmd)+' - '+describe+'.png')
         print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
         current_step = current_step + 1
 
