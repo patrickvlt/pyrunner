@@ -15,6 +15,8 @@ import xlwt
 import ipdb 
 import shutil
 
+from os.path import basename
+from zipfile import ZipFile
 from datetime import datetime
 from datetime import date
 from selenium import webdriver
@@ -642,6 +644,15 @@ def failed(e):
         print(str(e))
         print('')
         print(' ')
+        if shell is not None:
+            with ZipFile('pyrunner.zip', 'w') as zipObj:
+            # Iterate over all the files in directory
+                for folderName, subfolders, filenames in os.walk('pyrunner'):
+                    for filename in filenames:
+                        #create complete filepath of file in directory
+                        filePath = os.path.join(folderName, filename)
+                        # Add file to zip
+                        zipObj.write(filePath, basename(filePath))
         if dev is None:
             browser.quit()
             sys.exit(1)
