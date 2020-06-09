@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
-# Python 3.8.1
 
 import os
-os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
+os.system('pip3 install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 import sys
-try:
-    import requests
-except:
-    os.system('pip install requests')
+import requests
 from pushbullet import Pushbullet
-
 
 customArgs = []
 customArgs.append('--project=')
