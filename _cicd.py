@@ -4,7 +4,10 @@
 import os
 os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 import sys
-import requests
+try:
+    import requests
+except:
+    os.system('pip install requests')
 from pushbullet import Pushbullet
 
 
@@ -95,7 +98,7 @@ except Exception as e:
     TestFailed()
 
 # Run python file which runs defined test functions
-exit_code = os.system("php artisan serve --port=80 --env=testing --host=localhost & python vendor/pveltrop/pyrunner/test_app.py debug shell")
+exit_code = os.system("php artisan serve --port=80 --env=testing --host=localhost & python3 vendor/pveltrop/pyrunner/test_app.py debug shell")
     
 if exit_code > 0:
     TestFailed()
