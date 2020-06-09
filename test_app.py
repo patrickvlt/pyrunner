@@ -37,7 +37,7 @@ def RunTests():
     try:
         reload(test)
     except:
-        importlib.reload(test) 
+        print(' ')
     try:
         test.RunTests()
         pr.finished()
