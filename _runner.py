@@ -31,8 +31,6 @@ def DevMode():
     print('Or try to run a single command (located in _tests.py), for example: pr.click(element_to_click)'+pr.Style.RESET_ALL)
     print(' ')
     pr.ipdb.set_trace(context=1)
-
-print('foo2')
     
 def RunTests():
     try:
