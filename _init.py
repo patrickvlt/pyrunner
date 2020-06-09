@@ -63,7 +63,7 @@ if shell is not None:
     if dev is not None:
         max_retries = 0
     else:
-        max_retries = 5
+        max_retries = 2
 else:
     options = None
     max_retries = 0
@@ -84,7 +84,7 @@ failProject = None
 step_desc = None
 current_test = None
     
-@retry(stop_max_attempt_number=max_retries)
+@retry(stop_max_attempt_number=1)
 def click(xpath=None, css=None, id=None):
     def Click(css, xpath, id):
         try:
