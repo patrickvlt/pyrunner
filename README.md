@@ -62,11 +62,11 @@ ipdb> RunTests()
 
 If you want to re-run a single test, first literally enter:
 ```
-reload(test)
+ipdb> reload(test)
 ```
 Then:
 ```
-test.nameoftest()
+ipdb> test.nameoftest()
 ```
 
 ## Other parameters
