@@ -53,10 +53,7 @@ So if you want to run the fake function in _tests.py, you run fake().name() (for
 ipdb> fake.email()
 'siennaschiffer@van.com'
 ```
-If you want to run a single test function, you run name_of_test():
-```
-ipdb> test.name_of_test()
-```
+
 
 If you want to run all tests, and insert a breakpoint if it fails anywhere (your test code will be reloaded every time):
 ```
