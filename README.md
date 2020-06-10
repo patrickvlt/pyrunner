@@ -55,12 +55,21 @@ ipdb> fake.email()
 ```
 If you want to run a single test function, you run name_of_test():
 ```
-ipdb> name_of_test()
+ipdb> test.name_of_test()
 ```
 
-If you want to run all tests, and insert a breakpoint if it fails anywhere:
+If you want to run all tests, and insert a breakpoint if it fails anywhere (your test code will be reloaded every time):
 ```
 ipdb> RunTests()
+```
+
+If you want to re-run a single test, first literally enter:
+```
+reload(test)
+```
+Then:
+```
+test.nameoftest()
 ```
 
 ## Other parameters
