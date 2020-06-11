@@ -46,5 +46,3 @@ cnx = mysql.connector.connect(
     port=DB_PORT,
     user=DB_USERNAME,
     password=DB_PASSWORD)
-
-os.system("mysqldump -u "+DB_USERNAME+" --password="+DB_PASSWORD+" "+DB_DATABASE+" > database.sql")
