@@ -85,7 +85,7 @@ failProject = None
 step_desc = None
 current_test = None
 
-def wait_ajax(timeout=10):
+def wait_ajax(timeout=15):
     wait = WebDriverWait(browser, timeout)
     try:
         wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
@@ -570,7 +570,7 @@ def fetch_test_list(printTests=None, generateTests=None):
 # -----------------------------------------------------------
 
 def step(describe):
-    wait_ajax(5)
+    wait_ajax()
     global current_step
     global current_cmd
     global step_desc
@@ -583,7 +583,7 @@ def step(describe):
         current_step = current_step + 1
 
 def start(describe):
-    wait_ajax(5)
+    wait_ajax()
     global current_step
     global current_test
     current_step = 1
@@ -602,7 +602,7 @@ def start(describe):
 
 
 def end(describe):
-    wait_ajax(5)
+    wait_ajax()
     if describe is not None:
         if shell is not None:
             browser.save_screenshot('pyrunner/Test End: '+str(describe)+'.png')
