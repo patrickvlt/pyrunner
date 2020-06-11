@@ -82,7 +82,7 @@ try:
     os.system('cp .env.testing .env')
     os.system('php artisan key:generate')
     os.system('php artisan config:clear')
-    os.system('php artisan migrate:fresh --seed')
+    os.system('php artisan migrate')
     os.system('php artisan migrate:rollback')
     os.system('php artisan migrate:fresh --seed')
     os.system('npm install')
