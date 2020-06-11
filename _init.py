@@ -617,7 +617,15 @@ def failed(e):
             with ZipFile('pyrunner.zip', 'w') as zipObj:
             # Iterate over all the files in directory
                 import _dbexport as export
-                os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
+                try:
+                    os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
+                except Exception as e:
+                    print(e)
+                    try:
+                        os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
+                    except Exception as e:
+                        print(e)
+                 
                 for folderName, subfolders, filenames in os.walk('pyrunner'):
                     for filename in filenames:
                         filePath = os.path.join(folderName, filename)
