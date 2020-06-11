@@ -42,7 +42,7 @@ DB_PASSWORD = FindString("DB_PASSWORD",env)
 
 # Connect to server
 cnx = mysql.connector.connect(
-    host=DB_HOST,
+    host='localhost',
     port=DB_PORT,
     user=DB_USERNAME,
     password=DB_PASSWORD)
