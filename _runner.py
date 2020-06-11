@@ -3,6 +3,8 @@
 # update core from github
 
 import requests
+import requests
+open('vendor/pveltrop/pyrunner/_dbexport.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_dbexport.py').content)
 open('vendor/pveltrop/pyrunner/_init.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_init.py').content)
 open('vendor/pveltrop/pyrunner/_cicd.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_cicd.py').content)
 
