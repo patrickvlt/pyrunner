@@ -8,3 +8,4 @@ retrying
 xlwt
 xlrd
 ipdb
+mysql-connector-python
