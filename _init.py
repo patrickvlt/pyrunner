@@ -23,6 +23,7 @@ from selenium import webdriver
 from colorama import init, Fore, Back, Style
 from retrying import retry
 from chromedriver_py import binary_path
+from selenium.webdriver.support.ui import WebDriverWait
 from xlwt import Workbook
 
 init()
@@ -83,9 +84,22 @@ test_time=datetime.now()
 failProject = None
 step_desc = None
 current_test = None
+
+def wait_ajax(timeout=10):
+    wait = WebDriverWait(browser, timeout)
+    try:
+        wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
+        wait.until(lambda browser: browser.execute_script('return document.readyState') == 'complete')
+    except Exception as e:
+        pass
+    
+def get(url=''):
+    wait_ajax(20)
+    browser.get(url)
     
 @retry(stop_max_attempt_number=max_retries)
 def click(xpath=None, css=None, id=None):
+    wait_ajax()
     def Click(css, xpath, id):
         try:
             if debug is not None:
@@ -154,12 +168,14 @@ def click(xpath=None, css=None, id=None):
 
 @retry(stop_max_attempt_number=max_retries)
 def switch_tab(index):
+    wait_ajax()
     browser.switch_to.window(browser.window_handles[index])
 
 # Selecting
 
 @retry(stop_max_attempt_number=max_retries)
 def select_value_name(name, value):
+    wait_ajax()
     if debug is not None:
         print('Selecting '+str(value)+' in '+str(name))
     browser.find_element_by_xpath(
@@ -167,6 +183,7 @@ def select_value_name(name, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def select_index_name(name, index):
+    wait_ajax()
     if debug is not None:
         print('Selecting '+str(index)+' in '+str(name))
     browser.find_element_by_xpath(
@@ -174,6 +191,7 @@ def select_index_name(name, index):
     
 @retry(stop_max_attempt_number=max_retries)
 def select_value_id(id, value):
+    wait_ajax()
     if debug is not None:
         print('Selecting '+str(value)+' in '+str(id))
     browser.find_element_by_xpath(
@@ -181,6 +199,7 @@ def select_value_id(id, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def select_index_id(id, index):
+    wait_ajax()
     if debug is not None:
         print('Selecting '+str(index)+' in '+str(id))
     browser.find_element_by_xpath(
@@ -188,6 +207,7 @@ def select_index_id(id, index):
     
 # Finding elements, these functions will retry based on the timeout variable you send along
 def find_text(text, timeout = 2):
+    wait_ajax()
     @retry(stop_max_attempt_number=timeout)
     def wait(text):
         if debug is not None:
@@ -200,6 +220,7 @@ def find_text(text, timeout = 2):
 
 
 def find_id(id, timeout = 2):
+    wait_ajax()
     @retry(stop_max_attempt_number=timeout)
     def wait(id):
         if debug is not None:
@@ -213,6 +234,7 @@ def find_id(id, timeout = 2):
 
 
 def find_class(el_class, timeout = 2):
+    wait_ajax()
     @retry(stop_max_attempt_number=timeout)
     def wait(el_class):
         if debug is not None:
@@ -226,6 +248,7 @@ def find_class(el_class, timeout = 2):
 
 
 def find_css(css, timeout = 2):
+    wait_ajax()
     @retry(stop_max_attempt_number=timeout)
     def wait(css):
         if debug is not None:
@@ -239,6 +262,7 @@ def find_css(css, timeout = 2):
 
 
 def find_name(name, timeout = 2):
+    wait_ajax()
     @retry(stop_max_attempt_number=timeout)
     def wait(name):
         if debug is not None:
@@ -251,6 +275,7 @@ def find_name(name, timeout = 2):
     wait(name)
     
 def find_xpath(xpath, timeout = 2):
+    wait_ajax()
     @retry(stop_max_attempt_number=timeout)
     def wait(xpath):
         if debug is not None:
@@ -266,6 +291,7 @@ def find_xpath(xpath, timeout = 2):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_xpath(xpath, value):
+    wait_ajax()
     if debug is not None:
             print('Trying to type: '+str(value)+' in '+str(xpath))
     browser.find_element_by_xpath(xpath).send_keys(value)
@@ -273,6 +299,7 @@ def type_xpath(xpath, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_name(name, value):
+    wait_ajax()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(name))
     browser.find_element_by_name(name).send_keys(value)
@@ -280,6 +307,7 @@ def type_name(name, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_id(id, value):
+    wait_ajax()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(id))
     browser.find_element_by_id(id).send_keys(value)
@@ -287,6 +315,7 @@ def type_id(id, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_css(css, value):
+    wait_ajax()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(css))
     browser.find_element_by_css_selector(css).send_keys(value)
@@ -294,6 +323,7 @@ def type_css(css, value):
 # Clearing and Typing
 @retry(stop_max_attempt_number=max_retries)
 def change_text_xpath(xpath, value):
+    wait_ajax()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(xpath))
     browser.find_element_by_xpath(xpath).clear()
@@ -301,6 +331,7 @@ def change_text_xpath(xpath, value):
     
 @retry(stop_max_attempt_number=max_retries)
 def change_text_name(name, value):
+    wait_ajax()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(name))
     browser.find_element_by_name(name).clear()
@@ -308,6 +339,7 @@ def change_text_name(name, value):
     
 @retry(stop_max_attempt_number=max_retries)
 def change_text_id(id, value):
+    wait_ajax()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(id))
     browser.find_element_by_id(id).clear()
@@ -315,6 +347,7 @@ def change_text_id(id, value):
     
 @retry(stop_max_attempt_number=max_retries)
 def change_text_css(css, value):
+    wait_ajax()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(css))
     browser.find_element_by_css_selector(css).clear()
@@ -615,19 +648,7 @@ def failed(e):
         time.sleep(5)
         if shell is not None:
             with ZipFile('pyrunner.zip', 'w') as zipObj:
-            # Iterate over all the files in directory
-                import _dbexport as export
-                try:
-                    print(1)
-                    os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
-                except Exception as e:
-                    print(e)
-                    try:
-                        print(2)
-                        os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
-                    except Exception as e:
-                        print(e)
-                 
+            # Iterate over all the files in directory              
                 for folderName, subfolders, filenames in os.walk('pyrunner'):
                     for filename in filenames:
                         filePath = os.path.join(folderName, filename)
