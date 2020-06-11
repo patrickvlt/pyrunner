@@ -618,10 +618,12 @@ def failed(e):
             # Iterate over all the files in directory
                 import _dbexport as export
                 try:
+                    print(1)
                     os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
                 except Exception as e:
                     print(e)
                     try:
+                        print(2)
                         os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
                     except Exception as e:
                         print(e)
