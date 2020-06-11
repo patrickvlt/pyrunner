@@ -100,6 +100,7 @@ def get(url=''):
 @retry(stop_max_attempt_number=max_retries)
 def click(xpath=None, css=None, id=None):
     wait_ajax()
+    time.sleep(0.5)
     def Click(css, xpath, id):
         try:
             if debug is not None:
