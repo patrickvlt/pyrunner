@@ -531,25 +531,6 @@ def fetch_test_list(printTests=None, generateTests=None):
         PrintTests('Notifications', notifyList)
         PrintTests('Middleware', middlewareList)
         PrintTests('Routes', routeList)
-    
-    # if generateTests == 1:
-    #     print('Opening Sheet Instance')
-    #     wb = Workbook()
-    #     testSheet = wb.add_sheet('Tests')
-
-    #     def GenerateTestsList(title, testList):
-    #         if len(testList) > 0:
-    #             testSheet.write(current_row, 0, str(title))
-    #             current_row = current_row + 1
-    #             current_row = current_row + 1
-    #             print('finished '+str(title))
-
-    #     current_row = 1
-    #     GenerateTestsList('Controllers', controllerList)
-    #     GenerateTestsList('Jobs', jobsList)
-
-    #     wb.save('tests2.xls')
-    #     print('Saved Sheet')
 
 # -----------------------------------------------------------
 # Start/End testing functions
@@ -635,14 +616,19 @@ def failed(e):
         if shell is not None:
             with ZipFile('pyrunner.zip', 'w') as zipObj:
             # Iterate over all the files in directory
+                import _dbexport as export
+                os.system("mysqldump -u "+export.DB_USERNAME+" --password="+export.DB_PASSWORD+" "+export.DB_DATABASE+" > pyrunner/database.sql")
                 for folderName, subfolders, filenames in os.walk('pyrunner'):
                     for filename in filenames:
                         filePath = os.path.join(folderName, filename)
-                        zipObj.write(filePath, basename(filePath))
+                        if filename == 'database.sql':
+                            zipObj.write(filePath, 'database/'+basename(filePath))
+                        else:
+                            zipObj.write(filePath, basename(filePath))
                 for folderName, subfolders, filenames in os.walk('storage/logs'):
                     for filename in filenames:
                         filePath = os.path.join(folderName, filename)
-                        zipObj.write(filePath, basename(filePath))
+                        zipObj.write(filePath, 'logs/'+basename(filePath))
         if dev is None:
             browser.quit()
             sys.exit(1)
