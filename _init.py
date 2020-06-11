@@ -637,9 +637,11 @@ def failed(e):
             # Iterate over all the files in directory
                 for folderName, subfolders, filenames in os.walk('pyrunner'):
                     for filename in filenames:
-                        #create complete filepath of file in directory
                         filePath = os.path.join(folderName, filename)
-                        # Add file to zip
+                        zipObj.write(filePath, basename(filePath))
+                for folderName, subfolders, filenames in os.walk('storage/logs'):
+                    for filename in filenames:
+                        filePath = os.path.join(folderName, filename)
                         zipObj.write(filePath, basename(filePath))
         if dev is None:
             browser.quit()
