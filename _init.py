@@ -570,6 +570,7 @@ def fetch_test_list(printTests=None, generateTests=None):
 # -----------------------------------------------------------
 
 def step(describe):
+    wait_ajax(5)
     global current_step
     global current_cmd
     global step_desc
@@ -582,6 +583,7 @@ def step(describe):
         current_step = current_step + 1
 
 def start(describe):
+    wait_ajax(5)
     global current_step
     global current_test
     current_step = 1
@@ -600,6 +602,7 @@ def start(describe):
 
 
 def end(describe):
+    wait_ajax(5)
     if describe is not None:
         if shell is not None:
             browser.save_screenshot('pyrunner/Test End: '+str(describe)+'.png')
