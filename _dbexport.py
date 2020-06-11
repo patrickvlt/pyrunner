@@ -39,10 +39,3 @@ DB_PORT = FindString("DB_PORT",env)
 DB_DATABASE = FindString("DB_DATABASE",env)
 DB_USERNAME = FindString("DB_USERNAME",env)
 DB_PASSWORD = FindString("DB_PASSWORD",env)
-
-# Connect to server
-cnx = mysql.connector.connect(
-    host='localhost',
-    port=DB_PORT,
-    user=DB_USERNAME,
-    password=DB_PASSWORD)
