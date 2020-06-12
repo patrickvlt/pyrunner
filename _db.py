@@ -45,6 +45,8 @@ cur = cnx.cursor()
 cur.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='"+DB_DATABASE+"' ")
 results = cur.fetchall()
 
+print('Fetch database.')
+
 for result in results:
     tables.append(result[0])
 
