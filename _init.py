@@ -651,7 +651,8 @@ def failed(e):
         browser.save_screenshot('pyrunner/failed_state.png')
         time.sleep(5)
         if shell is not None:
-            import _db
+            import _db as db
+            db.OutputDB()
             with ZipFile('pyrunner.zip', 'w') as zipObj:
             # Iterate over all the files in directory              
                 for folderName, subfolders, filenames in os.walk('pyrunner'):
