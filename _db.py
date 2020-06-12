@@ -29,7 +29,7 @@ def OutputDB():
     # Get DB credentials from .env
     f = open(('.env'), 'r')
     env = f.read()
-    DB_HOST = 'mysql'
+    DB_HOST = 'localhost'
     # DB_HOST = FindString("DB_HOST",env)
     DB_PORT = FindString("DB_PORT",env)
     DB_DATABASE = FindString("DB_DATABASE",env)
