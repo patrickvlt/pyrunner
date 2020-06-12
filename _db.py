@@ -52,6 +52,8 @@ def OutputDB():
 
     print('Fetch database.')
 
+    print(results)
+    
     for result in results:
         tables.append(result[0])
 
