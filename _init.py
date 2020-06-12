@@ -651,12 +651,13 @@ def failed(e):
         browser.save_screenshot('pyrunner/failed_state.png')
         time.sleep(5)
         if shell is not None:
+            import _db
             with ZipFile('pyrunner.zip', 'w') as zipObj:
             # Iterate over all the files in directory              
                 for folderName, subfolders, filenames in os.walk('pyrunner'):
                     for filename in filenames:
                         filePath = os.path.join(folderName, filename)
-                        if filename == 'database.sql':
+                        if filename == 'database.txt':
                             zipObj.write(filePath, 'database/'+basename(filePath))
                         else:
                             zipObj.write(filePath, basename(filePath))
