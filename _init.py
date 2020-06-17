@@ -655,28 +655,31 @@ def failed(e):
             print(e)
         time.sleep(5)
         if shell is not None:
-            with ZipFile('pyrunner.zip', 'w') as zipObj:
-            # Iterate over all the files in directory              
-                for folderName, subfolders, filenames in os.walk('pyrunner'):
-                    for filename in filenames:
-                        filePath = os.path.join(folderName, filename)
-                        if filename == 'database.txt':
-                            try:
-                                zipObj.write(filePath, 'database/'+basename(filePath))
-                            except Exception as e:
-                                print(e)
-                        else:
-                            try:
-                                zipObj.write(filePath, basename(filePath))
-                            except Exception as e:
-                                print(e)
-                for folderName, subfolders, filenames in os.walk('storage/logs'):
-                    for filename in filenames:
-                        try:
+            try:
+                with ZipFile('pyrunner.zip', 'w') as zipObj:
+                # Iterate over all the files in directory              
+                    for folderName, subfolders, filenames in os.walk('pyrunner'):
+                        for filename in filenames:
                             filePath = os.path.join(folderName, filename)
-                            zipObj.write(filePath, 'logs/'+basename(filePath))
-                        except Exception as e:
-                            print(e)
+                            if filename == 'database.txt':
+                                try:
+                                    zipObj.write(filePath, 'database/'+basename(filePath))
+                                except Exception as e:
+                                    print(e)
+                            else:
+                                try:
+                                    zipObj.write(filePath, basename(filePath))
+                                except Exception as e:
+                                    print(e)
+                    for folderName, subfolders, filenames in os.walk('storage/logs'):
+                        for filename in filenames:
+                            try:
+                                filePath = os.path.join(folderName, filename)
+                                zipObj.write(filePath, 'logs/'+basename(filePath))
+                            except Exception as e:
+                                print(e)
+            except Exception as e:
+                print(e)
         if dev is None:
             browser.quit()
             sys.exit(1)
