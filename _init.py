@@ -649,24 +649,34 @@ def failed(e):
         print(str(e))
         print('')
         print(' ')
-        browser.save_screenshot('pyrunner/failed_state.png')
+        try:
+            browser.save_screenshot('pyrunner/failed_state.png')
+        except Exception as e:
+            print(e)
         time.sleep(5)
         if shell is not None:
-#             import _db as db
-#             db.OutputDB()
             with ZipFile('pyrunner.zip', 'w') as zipObj:
             # Iterate over all the files in directory              
                 for folderName, subfolders, filenames in os.walk('pyrunner'):
                     for filename in filenames:
                         filePath = os.path.join(folderName, filename)
                         if filename == 'database.txt':
-                            zipObj.write(filePath, 'database/'+basename(filePath))
+                            try:
+                                zipObj.write(filePath, 'database/'+basename(filePath))
+                            except Exception as e:
+                                print(e)
                         else:
-                            zipObj.write(filePath, basename(filePath))
+                            try:
+                                zipObj.write(filePath, basename(filePath))
+                            except Exception as e:
+                                print(e)
                 for folderName, subfolders, filenames in os.walk('storage/logs'):
                     for filename in filenames:
-                        filePath = os.path.join(folderName, filename)
-                        zipObj.write(filePath, 'logs/'+basename(filePath))
+                        try:
+                            filePath = os.path.join(folderName, filename)
+                            zipObj.write(filePath, 'logs/'+basename(filePath))
+                        except Exception as e:
+                            print(e)
         if dev is None:
             browser.quit()
             sys.exit(1)
