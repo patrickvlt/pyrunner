@@ -68,7 +68,7 @@ if shell is not None:
 else:
     options = webdriver.ChromeOptions()
     options.add_argument('--auto-open-devtools-for-tabs')
-    max_retries = 0
+    max_retries = 2
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
