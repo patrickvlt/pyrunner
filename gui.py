@@ -33,6 +33,14 @@ class RunTestsDev(Button):
 
     def _onButtonClick(self):
         os.system('python vendor/pveltrop/pyrunner/test_app.py dev debug')
+        
+class Update(Button):
+    def __init__(self,master=None,text=None):
+        Button.__init__(self,master,text=text)
+        self['command'] = self._onButtonClick
+
+    def _onButtonClick(self):
+        os.system('python vendor/pveltrop/pyrunner/update.py')
 
 
 class App(Frame):
@@ -47,6 +55,9 @@ class App(Frame):
         
         self.button3 = RunTestsDev(self,text="Development mode")
         self.button3.grid()
+        
+        self.button4 = Update(self,text="Update PyRunner")
+        self.button4.grid()
         
     def start(self):
         _thread.start_new_thread(self.slow_function, ())
