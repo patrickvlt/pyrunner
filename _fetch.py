@@ -2,6 +2,8 @@
 import requests
 import os
 
+print("foo")
+
 runnerContent = requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_runner.py').content
 if '404' not in runnerContent:
     open('vendor/pveltrop/pyrunner/_runner.py', 'wb').write(runnerContent)
