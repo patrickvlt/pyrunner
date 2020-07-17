@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# update core from github
-
-import requests
-import requests
-open('vendor/pveltrop/pyrunner/_db.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_db.py').content)
-open('vendor/pveltrop/pyrunner/_init.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_init.py').content)
-open('vendor/pveltrop/pyrunner/_cicd.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_cicd.py').content)
-
 # load tests and chromedriver
 try:
     from importlib import reload

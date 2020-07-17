@@ -54,5 +54,16 @@ class Update extends Command
         } else {
             $console->info('Succesfully updated Pyrunner requirements.');
         }
+
+        $console->info('Updating PyRunner core. This might take a minute.');
+        $cmd = 'python vendor/pveltrop/pyrunner/_update.py';
+        exec($cmd, $output, $returnTwo);
+        if ($returnTwo != 0){
+            $cmd = 'python3 vendor/pveltrop/pyrunner/_update.py';
+            exec($cmd, $output, $returnTwo);
+            if ($returnTwo != 0){
+                $console->error('Can\'t update PyRunner core files. Check your internet connection.')
+            }
+        }
     }
 }
