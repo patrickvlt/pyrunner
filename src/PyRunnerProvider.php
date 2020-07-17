@@ -2,15 +2,17 @@
 
 namespace Pveltrop\PyRunner;
 
+use Pveltrop\PyRunner\Install;
 use Illuminate\Support\ServiceProvider;
 
 class PyRunnerProvider extends ServiceProvider
 {
-    protected $commands = [
-        'Pveltrop\PyRunner\Commands\Install',
-    ];
-
-    public function register(){
-        $this->commands($this->commands);
+    public function boot()
+{
+    if ($this->app->runningInConsole()) {
+        $this->commands([
+            Install::class,
+        ]);
     }
+}
 }
