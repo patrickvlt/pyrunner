@@ -27,7 +27,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Pveltrop\\PyRunner\\GitHelperProvider"
+                "Pveltrop\\PyRunner\\PyRunnerProvider"
             ]
         }
     }
