@@ -77,17 +77,15 @@ class Install extends Command
             $console->info('Succesfully installed Pyrunner. Available commands:');
             $console->line('php artisan pyrunner:install');
             $console->line('php artisan pyrunner:update');
-            $console->line('php artisan pyrunner:gui');
+            $console->line('php artisan pyrunner:start');
         }
 
-        if ($console->confirm('Do you have Python 3, Tkinter and Pip installed?')){
+        if ($console->confirm('Do you have Python 3 and Pip installed?')){
             Install($console);
         } else {
             $console->error('Please install Python 3 and Pip first');
             $console->line('https://www.python.org/downloads/release/python-381/');
-            $console->line('https://tkdocs.com/tutorial/install.html#installwin');
             $console->line('https://pip.pypa.io/en/stable/installing/');
-            $console->line('sudo apt-get install python3-tk');
             if ($console->confirm('Finished installing?')){
                 Install($console);
             }

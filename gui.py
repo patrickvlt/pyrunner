@@ -14,7 +14,7 @@ class Serve(Button):
             os.system("gnome-terminal -e 'bash -c \"sudo php artisan serve --port=80 --host=localhost --env=testing;bash\"'")
         except:
             try:
-                os.system('start cmd.exe @cmd /k "php artisan serve --port=80 --host=localhost --env=testing"')
+                os.system('start cmd.exe @cmd /k ""')
             except:
                 print("Can\'t launch terminal to start PHP artisan serve. Check if gnome-terminal (Linux) or start (windows) cmds are working.")
 
