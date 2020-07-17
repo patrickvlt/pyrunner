@@ -41,17 +41,18 @@ class Update extends Command
     public function handle()
     {
         $console = $this;
-        $console->info('Updating PyRunner.');
-
-        $cmd = 'python vendor/pveltrop/pyrunner/update.py';
-        exec($cmd, $output, $return);
+        $console->info('Updating Pyrunner requirements with pip. This might take a minute.');
+        exec('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt', $output, $return);
         if ($return != 0) {
-            $cmd = 'python3 vendor/pveltrop/pyrunner/update.py';
-            exec($cmd, $output, $returnTwo);
-            if ($returnTwo != 0){
-                $console->error('Can\'t launch the update script');
+            $console->info('Updating Pyrunner requirements with pip3 instead of pip. This might take a minute.');
+            exec('pip3 install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt', $outputTwo, $returnTwo);
+            if ($returnTwo != 0) {
+                $console->error('Updating requirements failed. Please run: pip(3) install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt');
+            } else {
+                $console->info('Succesfully updated Pyrunner requirements.');
             }
+        } else {
+            $console->info('Succesfully updated Pyrunner requirements.');
         }
-        $console->info('Finished updating');
     }
 }

@@ -49,7 +49,7 @@ class Install extends Command
                 $console->info('Installing Pyrunner requirements with pip3 instead of pip. This might take a minute.');
                 exec('pip3 install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt', $outputTwo, $returnTwo);
                 if ($returnTwo != 0) {
-                    $console->error('Installing requirements failed. Please run: pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt');
+                    $console->error('Installing requirements failed. Please run: pip(3) install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt');
                 } else {
                     $console->info('Succesfully installed Pyrunner requirements.');
                 }
@@ -74,7 +74,10 @@ class Install extends Command
                     $console->line('Please refer to the documentation: https://github.com/43874/pyrunner');
                 }
             }
-            $console->info('Succesfully installed Pyrunner. Run php artisan pyrunner:test to start testing');
+            $console->info('Succesfully installed Pyrunner. Available commands:');
+            $console->line('php artisan pyrunner:install');
+            $console->line('php artisan pyrunner:update');
+            $console->line('php artisan pyrunner:gui');
         }
 
         if ($console->confirm('Do you have Python 3, Tkinter and Pip installed?')){

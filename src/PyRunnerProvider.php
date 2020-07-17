@@ -14,6 +14,7 @@ class PyRunnerProvider extends ServiceProvider
         $this->commands([
             Install::class,
             GUI::class,
+            Update::class,
         ]);
     }
 }
