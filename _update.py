@@ -2,6 +2,7 @@
 import requests
 
 fetchContent = requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_fetch.py').content
-if '404' not in fetchContent:
+fetchStatus = requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_fetch2py').status_code
+if fetchStatus != 404:
     open('vendor/pveltrop/pyrunner/_fetch.py', 'wb').write(fetchContent)
     import _fetch
