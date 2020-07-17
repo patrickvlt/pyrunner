@@ -4,10 +4,13 @@ services:
   - mysql:5.7
 
 variables:
-  MYSQL_DATABASE: test_name
-  MYSQL_ROOT_PASSWORD: root_pass
+  MYSQL_DATABASE: test_office
+  MYSQL_ROOT_PASSWORD: local
   DB_HOST: mysql
   DB_USERNAME: root
+  LANG: es_ES.utf8
+  LC_ALL: es_ES.UTF-8
+  LC_LANG: es_ES.UTF-8
 
 stages:
   - test
@@ -17,11 +20,14 @@ Testing App:
   retry: 2
   only: [merge_requests]
   before_script:
-  - echo "en_US UTF-8" > /etc/locale.gen
-  - locale-gen en_US.UTF-8
-  - export LANG=en_US.UTF-8
-  - export LANGUAGE=en_US:en
-  - export LC_ALL=en_US.UTF-8
+    - locale -a | grep "UTF-8"
+    - export LC_ALL=$(locale -a | grep UTF-8)
+    - export LC_ALL=C.UTF-8
+    - export PYTHONIOENCODING=utf-8
+    - echo 'Testing UTF-8'
+    - python -c 'print(u"\u2122");'
+    - sudo pip2 uninstall -y backports.functools-lru-cache
+    - sudo apt-get install -f -y python-backports.functools-lru-cache
   script:
     - ln -s /laradock/vendor vendor
     - composer install

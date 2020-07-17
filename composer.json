@@ -11,9 +11,24 @@
     "authors": [
         {
             "name": "Patrick Veltrop",
-            "email": "patrick@jottenheijm.com",
+            "email": "patrickveltrop@live.nl",
             "homepage": "https://pv-media.nl/",
             "role": "Developer"
         }
-    ]
+    ],
+    "autoload": {
+        "classmap": [
+            "src/"
+        ],
+        "psr-4": {
+            "Pveltrop\\PyRunner\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Pveltrop\\PyRunner\\GitHelperProvider"
+            ]
+        }
+    }
 }
