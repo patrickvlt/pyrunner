@@ -62,7 +62,7 @@ class Update extends Command
             $cmd = 'python3 vendor/pveltrop/pyrunner/_update.py';
             exec($cmd, $output, $returnTwo);
             if ($returnTwo != 0){
-                $console->error('Can\'t update PyRunner core files. Check your internet connection.')
+                $console->error('Can\'t update PyRunner core files. Check your internet connection.');
             }
         }
     }
