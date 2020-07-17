@@ -44,21 +44,21 @@ class Start extends Command
         $console->info('Starting PyRunner.');
 
         $env = ($console->option('env')) ? '--env='.$console->option('env') : '';
+        $dev = ($console->option('dev')) ? 'dev' : '';
+        $debug = ($console->option('debug')) ? 'debug' : '';
+        $shell = ($console->option('shell')) ? 'shell' : '';
 
-        function RunPyrunner($console){
-            $dev = ($console->option('dev')) ? 'dev' : '';
-            $debug = ($console->option('debug')) ? 'debug' : '';
-            $shell = ($console->option('shell')) ? 'shell' : '';
+        function RunPyrunner($console,$dev,$debug,$shell){
             $cmd = "gnome-terminal -e 'bash -c \"python vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell.";bash\"'";
             exec($cmd, $output, $return);
             if ($return != 0) {
                 $cmd = "gnome-terminal -e 'bash -c \"python3 vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell.";bash\"'";
                 exec($cmd, $output, $returnTwo);
                 if ($returnTwo != 0){
-                    $cmd = 'start cmd.exe @cmd /k "python vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
+                    $cmd = 'start "test" cmd.exe /k "python vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
                     exec($cmd, $output, $return);
                     if ($return != 0) {
-                        $cmd = 'start cmd.exe @cmd /k "python3 vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
+                        $cmd = 'start "test" cmd.exe /k "python3 vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
                         exec($cmd, $output, $returnTwo);
                         if ($returnTwo != 0){
                             $console->error('Can\'t launch PyRunner.');
@@ -72,18 +72,20 @@ class Start extends Command
             $cmd = "gnome-terminal -e 'bash -c \"sudo php artisan serve --port=80 ".$env." --host=localhost;bash\"'";
             exec($cmd, $output, $return);
             if ($return != 0){
-                $cmd = 'start cmd.exe @cmd /k "php artisan serve --port=80 '.$env.' --host=localhost"';
+                $cmd = 'start cmd /c "start cmd.exe /k "php artisan serve --port=80 '.$env.' --host=localhost" & start cmd.exe /k "python vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
                 exec($cmd, $output, $return);
                 if ($return != 0){
                     $console->error('Can\'t serve project.');
                     if ($console->confirm('Launch PyRunner anyway?')){
-                        RunPyrunner($console);
+                        RunPyrunner($console,$dev,$debug,$shell);
                     }
                 }
+            } else {
+                RunPyrunner($console,$dev,$debug,$shell);
             }
+        } else {
+            RunPyrunner($console,$dev,$debug,$shell);
         }
-
-        RunPyrunner($console);
         
     }
 }
