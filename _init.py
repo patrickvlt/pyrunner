@@ -169,6 +169,22 @@ def click(xpath=None, css=None, id=None):
     Click(css, xpath, id)
 
 @retry(stop_max_attempt_number=max_retries)
+def select2(selector=None, cmd=None):
+    wait_ajax()
+    time.sleep(0.5)
+    try:
+        if selector is not None and cmd is not None:
+            print('Trying to execute command on select2 element(s): '+str(selector))
+            browser.execute_script("$('"+str(selector)+"').select2('"+str(cmd)+"')")
+        if selector is not None and cmd is not None:
+            print(Fore.GREEN+'Select2 ('+str(cmd)+') has been executed'+Style.RESET_ALL)
+        return
+    except:
+        if selector is not None and cmd is not None:
+            print('Select2 cmd execution failed: ' + str(selector))
+        raise TypeError("Can't execute select2 ("+str(cmd)+") on: "+str(selector)+".")
+
+@retry(stop_max_attempt_number=max_retries)
 def switch_tab(index):
     wait_ajax()
     browser.switch_to.window(browser.window_handles[index])
