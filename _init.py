@@ -24,6 +24,7 @@ from colorama import init, Fore, Back, Style
 from retrying import retry
 from chromedriver_py import binary_path
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 from xlwt import Workbook
 
 init()
@@ -183,6 +184,22 @@ def select2(selector=None, cmd=None):
         if selector is not None and cmd is not None:
             print('Select2 cmd execution failed: ' + str(selector))
         raise TypeError("Can't execute select2 ("+str(cmd)+") on: "+str(selector)+".")
+    
+@retry(stop_max_attempt_number=max_retries)
+def hover(selector=None):
+    wait_ajax()
+    time.sleep(0.5)
+    try:
+        if selector is not None:
+            print('Trying to hover on: '+str(selector))
+            element = browser.find_element_by_css_selector(selector)
+            hover = ActionChains(browser).move_to_element(element)
+            hover.perform()
+        return
+    except:
+        if selector is not None:
+            print('Hovering failed on: ' + str(selector))
+        raise TypeError("Can't hover on: "+str(selector)+".")
 
 @retry(stop_max_attempt_number=max_retries)
 def switch_tab(index):
