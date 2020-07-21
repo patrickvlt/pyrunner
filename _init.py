@@ -87,7 +87,7 @@ failProject = None
 step_desc = None
 current_test = None
 
-def wait_ajax(timeout=15):
+def wait_ajax(timeout=7):
     wait = WebDriverWait(browser, timeout)
     try:
         wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
@@ -104,26 +104,27 @@ def click(xpath=None, css=None, id=None):
     wait_ajax()
     time.sleep(0.5)
     def Click(css, xpath, id):
-        try:
-            if debug is not None:
-                print('Trying to click by CSS with Selenium on: '+str(css))
-            browser.find_element_by_css_selector(css).click()
-            if debug is not None:
-                print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
-            return
-        except:
-            if debug is not None:
-                print('CSS click failed with: ' + str(css))
-        try:
-            if debug is not None:
-                print('Trying to click by CSS with JS on: '+str(css))
-            browser.execute_script('document.querySelectorAll("'+css+'").click()')
-            if debug is not None:
-                print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
-            return
-        except:
-            if debug is not None:
-                print('CSS click failed with: ' + str(css))
+        if css is not None:
+            try:
+                if debug is not None:
+                    print('Trying to click by CSS with Selenium on: '+str(css))
+                browser.find_element_by_css_selector(css).click()
+                if debug is not None:
+                    print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
+                return
+            except:
+                if debug is not None:
+                    print('CSS click failed with: ' + str(css))
+            try:
+                if debug is not None:
+                    print('Trying to click by CSS with JS on: '+str(css))
+                browser.execute_script('document.querySelectorAll("'+css+'").click()')
+                if debug is not None:
+                    print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
+                return
+            except:
+                if debug is not None:
+                    print('CSS click failed with: ' + str(css))
         if xpath is not None:
             try:
                 if debug is not None:
@@ -135,6 +136,8 @@ def click(xpath=None, css=None, id=None):
             except:
                 if debug is not None:
                     print('Xpath click failed with: ' + str(xpath))
+                if id is None:
+                    raise TypeError("Can't click this element: "+str(xpath)+".")
         if id is not None:
             try:
                 if debug is not None:
