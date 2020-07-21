@@ -114,7 +114,7 @@ def click(xpath=None, css=None, id=None):
                 return
             except:
                 if debug is not None:
-                    print('CSS click failed with: ' + str(css))
+                    print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
             try:
                 if debug is not None:
                     print('Trying to click by CSS with JS on: '+str(css))
@@ -124,7 +124,7 @@ def click(xpath=None, css=None, id=None):
                 return
             except:
                 if debug is not None:
-                    print('CSS click failed with: ' + str(css))
+                    print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
         if xpath is not None:
             try:
                 if debug is not None:
@@ -135,7 +135,7 @@ def click(xpath=None, css=None, id=None):
                 return
             except:
                 if debug is not None:
-                    print('Xpath click failed with: ' + str(xpath))
+                    print(Fore.RED+'Xpath click failed with: ' + str(xpath)+Style.RESET_ALL)
                 if id is None:
                     raise TypeError("Can't click this element: "+str(xpath)+".")
         if id is not None:
@@ -148,7 +148,7 @@ def click(xpath=None, css=None, id=None):
                 return
             except:
                 if debug is not None:
-                    print('ID click failed with: ' + str(id))
+                    print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
             try:
                 if debug is not None:
                     print('Trying to click by ID on: '+str(id))
@@ -158,7 +158,7 @@ def click(xpath=None, css=None, id=None):
                 return
             except:
                 if debug is not None:
-                    print('ID click failed with: ' + str(id))
+                    print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
             try:
                 if debug is not None:
                     print('Trying to click by ID by executing script: '+"document.getElementById('"+id+"').click()")
@@ -168,7 +168,7 @@ def click(xpath=None, css=None, id=None):
                 return
             except:
                 if debug is not None:
-                    print('ID click failed with: ' + str(id))
+                    print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
                 raise TypeError("Can't click this element: "+str(id)+".")
     Click(css, xpath, id)
 
@@ -185,7 +185,7 @@ def select2(selector=None, cmd=None):
         return
     except:
         if selector is not None and cmd is not None:
-            print('Select2 cmd execution failed: ' + str(selector))
+            print(Fore.RED+'Select2 cmd execution failed: ' + str(selector)+Style.RESET_ALL)
         raise TypeError("Can't execute select2 ("+str(cmd)+") on: "+str(selector)+".")
     
 @retry(stop_max_attempt_number=max_retries)
@@ -201,7 +201,7 @@ def hover(selector=None):
         return
     except:
         if selector is not None:
-            print('Hovering failed on: ' + str(selector))
+            print(Fore.RED+'Hovering failed on: ' + str(selector)+Style.RESET_ALL)
         raise TypeError("Can't hover on: "+str(selector)+".")
 
 @retry(stop_max_attempt_number=max_retries)
