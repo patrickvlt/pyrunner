@@ -87,10 +87,10 @@ failProject = None
 step_desc = None
 current_test = None
 
-def wait_ajax(timeout=7):
+def wait_ajax(timeout=20):
     wait = WebDriverWait(browser, timeout)
     try:
-        wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
+        # wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
         wait.until(lambda browser: browser.execute_script('return document.readyState') == 'complete')
     except Exception as e:
         pass
@@ -99,7 +99,6 @@ def get(url=''):
     wait_ajax(20)
     browser.get(url)
     
-@retry(stop_max_attempt_number=max_retries)
 def click(xpath=None, css=None, id=None):
     wait_ajax()
     time.sleep(0.5)
@@ -107,28 +106,36 @@ def click(xpath=None, css=None, id=None):
         if css is not None:
             try:
                 if debug is not None:
-                    print('Trying to click by CSS with JS on: '+str(css))
+                    print('Trying to click with CSS & JS on: '+str(css))
                 browser.execute_script('document.querySelectorAll("'+css+'").click()')
                 if debug is not None:
                     print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
                 return
             except:
-                if debug is not None:
-                    print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
                 try:
                     if debug is not None:
-                        print('Trying to click by CSS with Selenium on: '+str(css))
-                    browser.find_element_by_css_selector(css).click()
+                        print('Trying to click with first CSS result & JS on: '+str(css))
+                    browser.execute_script('document.querySelectorAll("'+css+'")[0].click()')
                     if debug is not None:
                         print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
                     return
                 except:
                     if debug is not None:
                         print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
+                    try:
+                        if debug is not None:
+                            print('Trying to click with CSS & Selenium on: '+str(css))
+                        browser.find_element_by_css_selector(css).click()
+                        if debug is not None:
+                            print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
+                        return
+                    except:
+                        if debug is not None:
+                            print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
         if xpath is not None:
             try:
                 if debug is not None:
-                    print('Trying to click by Xpath on: '+str(xpath))
+                    print('Trying to click with Xpath on: '+str(xpath))
                 browser.find_element_by_xpath(xpath).click()
                 if debug is not None:
                     print(Fore.GREEN+'Clicked with Xpath, returning'+Style.RESET_ALL)
@@ -138,7 +145,27 @@ def click(xpath=None, css=None, id=None):
                     print(Fore.RED+'Xpath click failed with: ' + str(xpath)+Style.RESET_ALL)
                 if id is None:
                     raise TypeError("Can't click this element: "+str(xpath)+".")
+            try:
+                if debug is not None:
+                    print('Trying to click with Xpath & JS on: '+str(xpath))
+                browser.execute_script("document.evaluate('"+str(xpath)+"', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();")
+                if debug is not None:
+                    print(Fore.GREEN+'Clicked with Xpath, returning'+Style.RESET_ALL)
+                return
+            except:
+                if debug is not None:
+                    print(Fore.RED+'Xpath click failed with: ' + str(xpath)+Style.RESET_ALL)
         if id is not None:
+            try:
+                if debug is not None:
+                    print('Trying to click with ID & JS: '+"document.getElementById('"+id+"').click()")
+                browser.execute_script("document.getElementById('"+id+"').click()")
+                if debug is not None:
+                    print(Fore.GREEN+'Clicked with browser script, returning'+Style.RESET_ALL)
+                return
+            except:
+                if debug is not None:
+                    print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
             try:
                 if debug is not None:
                     print('Trying to click with ID on: '+'//*[@id="'+id+'"]')
@@ -151,17 +178,7 @@ def click(xpath=None, css=None, id=None):
                     print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
             try:
                 if debug is not None:
-                    print('Trying to click by ID by executing script: '+"document.getElementById('"+id+"').click()")
-                browser.execute_script("document.getElementById('"+id+"').click()")
-                if debug is not None:
-                    print(Fore.GREEN+'Clicked with browser script, returning'+Style.RESET_ALL)
-                return
-            except:
-                if debug is not None:
-                    print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
-            try:
-                if debug is not None:
-                    print('Trying to click by ID on: '+str(id))
+                    print('Trying to click with ID on: '+str(id))
                 browser.find_element_by_id(id).click()
                 if debug is not None:
                     print(Fore.GREEN+'Clicked with ID, returning'+Style.RESET_ALL)
@@ -202,7 +219,7 @@ def hover(selector=None):
     except:
         if selector is not None:
             print(Fore.RED+'Hovering failed on: ' + str(selector)+Style.RESET_ALL)
-        raise TypeError("Can't hover on: "+str(selector)+".")
+        print("Can't hover on: "+str(selector)+".")
 
 @retry(stop_max_attempt_number=max_retries)
 def switch_tab(index):
