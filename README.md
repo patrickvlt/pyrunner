@@ -187,6 +187,8 @@ pr.switch_tab(index)
 
 Switch the browser to the provided index.
 
+## Selecting
+
 ```
 pr.select_value_name(name, value)
 ```
