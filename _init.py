@@ -107,16 +107,6 @@ def click(xpath=None, css=None, id=None):
         if css is not None:
             try:
                 if debug is not None:
-                    print('Trying to click by CSS with Selenium on: '+str(css))
-                browser.find_element_by_css_selector(css).click()
-                if debug is not None:
-                    print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
-                return
-            except:
-                if debug is not None:
-                    print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
-            try:
-                if debug is not None:
                     print('Trying to click by CSS with JS on: '+str(css))
                 browser.execute_script('document.querySelectorAll("'+css+'").click()')
                 if debug is not None:
@@ -125,6 +115,16 @@ def click(xpath=None, css=None, id=None):
             except:
                 if debug is not None:
                     print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
+                try:
+                    if debug is not None:
+                        print('Trying to click by CSS with Selenium on: '+str(css))
+                    browser.find_element_by_css_selector(css).click()
+                    if debug is not None:
+                        print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
+                    return
+                except:
+                    if debug is not None:
+                        print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
         if xpath is not None:
             try:
                 if debug is not None:
@@ -151,20 +151,20 @@ def click(xpath=None, css=None, id=None):
                     print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
             try:
                 if debug is not None:
-                    print('Trying to click by ID on: '+str(id))
-                browser.find_element_by_id(id).click()
+                    print('Trying to click by ID by executing script: '+"document.getElementById('"+id+"').click()")
+                browser.execute_script("document.getElementById('"+id+"').click()")
                 if debug is not None:
-                    print(Fore.GREEN+'Clicked with ID, returning'+Style.RESET_ALL)
+                    print(Fore.GREEN+'Clicked with browser script, returning'+Style.RESET_ALL)
                 return
             except:
                 if debug is not None:
                     print(Fore.RED+'ID click failed with: ' + str(id)+Style.RESET_ALL)
             try:
                 if debug is not None:
-                    print('Trying to click by ID by executing script: '+"document.getElementById('"+id+"').click()")
-                browser.execute_script("document.getElementById('"+id+"').click()")
+                    print('Trying to click by ID on: '+str(id))
+                browser.find_element_by_id(id).click()
                 if debug is not None:
-                    print(Fore.GREEN+'Clicked with browser script, returning'+Style.RESET_ALL)
+                    print(Fore.GREEN+'Clicked with ID, returning'+Style.RESET_ALL)
                 return
             except:
                 if debug is not None:
