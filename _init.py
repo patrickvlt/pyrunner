@@ -87,7 +87,7 @@ failProject = None
 step_desc = None
 current_test = None
 
-def wait_ajax(timeout=20):
+def wait_document(timeout=20):
     wait = WebDriverWait(browser, timeout)
     try:
         # wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
@@ -95,12 +95,22 @@ def wait_ajax(timeout=20):
     except Exception as e:
         pass
     
-def get(url=''):
-    wait_ajax(20)
-    browser.get(url)
+def wait_ajax(timeout=30):
+    wait = WebDriverWait(browser, timeout)
+    try:
+        wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
+        wait.until(lambda browser: browser.execute_script('return document.readyState') == 'complete')
+    except Exception as e:
+        pass
     
+def get(url=''):
+    wait_document(20)
+    browser.get(url)
+
+@retry(stop_max_attempt_number=max_retries)
 def click(xpath=None, css=None, id=None):
-    wait_ajax()
+    wait_document()
+    wait_ajax(1.25)
     time.sleep(0.5)
     def Click(css, xpath, id):
         if css is not None:
@@ -191,7 +201,7 @@ def click(xpath=None, css=None, id=None):
 
 @retry(stop_max_attempt_number=max_retries)
 def select2(selector=None, cmd=None):
-    wait_ajax()
+    wait_document()
     time.sleep(0.5)
     try:
         if selector is not None and cmd is not None:
@@ -207,7 +217,7 @@ def select2(selector=None, cmd=None):
     
 @retry(stop_max_attempt_number=max_retries)
 def hover(selector=None):
-    wait_ajax()
+    wait_document()
     time.sleep(0.5)
     try:
         if selector is not None:
@@ -223,14 +233,14 @@ def hover(selector=None):
 
 @retry(stop_max_attempt_number=max_retries)
 def switch_tab(index):
-    wait_ajax()
+    wait_document()
     browser.switch_to.window(browser.window_handles[index])
 
 # Selecting
 
 @retry(stop_max_attempt_number=max_retries)
 def select_value_name(name, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Selecting '+str(value)+' in '+str(name))
     browser.find_element_by_xpath(
@@ -238,7 +248,7 @@ def select_value_name(name, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def select_index_name(name, index):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Selecting '+str(index)+' in '+str(name))
     browser.find_element_by_xpath(
@@ -246,7 +256,7 @@ def select_index_name(name, index):
     
 @retry(stop_max_attempt_number=max_retries)
 def select_value_id(id, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Selecting '+str(value)+' in '+str(id))
     browser.find_element_by_xpath(
@@ -254,7 +264,7 @@ def select_value_id(id, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def select_index_id(id, index):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Selecting '+str(index)+' in '+str(id))
     browser.find_element_by_xpath(
@@ -262,7 +272,7 @@ def select_index_id(id, index):
     
 # Finding elements, these functions will retry based on the timeout variable you send along
 def find_text(text, timeout = 2):
-    wait_ajax()
+    wait_document()
     @retry(stop_max_attempt_number=timeout)
     def wait(text):
         if debug is not None:
@@ -275,7 +285,7 @@ def find_text(text, timeout = 2):
 
 
 def find_id(id, timeout = 2):
-    wait_ajax()
+    wait_document()
     @retry(stop_max_attempt_number=timeout)
     def wait(id):
         if debug is not None:
@@ -289,7 +299,7 @@ def find_id(id, timeout = 2):
 
 
 def find_class(el_class, timeout = 2):
-    wait_ajax()
+    wait_document()
     @retry(stop_max_attempt_number=timeout)
     def wait(el_class):
         if debug is not None:
@@ -303,7 +313,7 @@ def find_class(el_class, timeout = 2):
 
 
 def find_css(css, timeout = 2):
-    wait_ajax()
+    wait_document()
     @retry(stop_max_attempt_number=timeout)
     def wait(css):
         if debug is not None:
@@ -317,7 +327,7 @@ def find_css(css, timeout = 2):
 
 
 def find_name(name, timeout = 2):
-    wait_ajax()
+    wait_document()
     @retry(stop_max_attempt_number=timeout)
     def wait(name):
         if debug is not None:
@@ -330,7 +340,7 @@ def find_name(name, timeout = 2):
     wait(name)
     
 def find_xpath(xpath, timeout = 2):
-    wait_ajax()
+    wait_document()
     @retry(stop_max_attempt_number=timeout)
     def wait(xpath):
         if debug is not None:
@@ -346,7 +356,7 @@ def find_xpath(xpath, timeout = 2):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_xpath(xpath, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
             print('Trying to type: '+str(value)+' in '+str(xpath))
     browser.find_element_by_xpath(xpath).send_keys(value)
@@ -354,7 +364,7 @@ def type_xpath(xpath, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_name(name, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(name))
     browser.find_element_by_name(name).send_keys(value)
@@ -362,7 +372,7 @@ def type_name(name, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_id(id, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(id))
     browser.find_element_by_id(id).send_keys(value)
@@ -370,7 +380,7 @@ def type_id(id, value):
 
 @retry(stop_max_attempt_number=max_retries)
 def type_css(css, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(css))
     browser.find_element_by_css_selector(css).send_keys(value)
@@ -378,7 +388,7 @@ def type_css(css, value):
 # Clearing and Typing
 @retry(stop_max_attempt_number=max_retries)
 def change_text_xpath(xpath, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(xpath))
     browser.find_element_by_xpath(xpath).clear()
@@ -386,7 +396,7 @@ def change_text_xpath(xpath, value):
     
 @retry(stop_max_attempt_number=max_retries)
 def change_text_name(name, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(name))
     browser.find_element_by_name(name).clear()
@@ -394,7 +404,7 @@ def change_text_name(name, value):
     
 @retry(stop_max_attempt_number=max_retries)
 def change_text_id(id, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(id))
     browser.find_element_by_id(id).clear()
@@ -402,7 +412,7 @@ def change_text_id(id, value):
     
 @retry(stop_max_attempt_number=max_retries)
 def change_text_css(css, value):
-    wait_ajax()
+    wait_document()
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(css))
     browser.find_element_by_css_selector(css).clear()
@@ -625,7 +635,7 @@ def fetch_test_list(printTests=None, generateTests=None):
 # -----------------------------------------------------------
 
 def step(describe):
-    wait_ajax()
+    wait_document()
     global current_step
     global current_cmd
     global step_desc
@@ -638,7 +648,7 @@ def step(describe):
         current_step = current_step + 1
 
 def start(describe):
-    wait_ajax()
+    wait_document()
     global current_step
     global current_test
     current_step = 1
@@ -657,7 +667,7 @@ def start(describe):
 
 
 def end(describe):
-    wait_ajax()
+    wait_document()
     if describe is not None:
         if shell is not None:
             browser.save_screenshot('pyrunner/Test End: '+str(describe)+'.png')
