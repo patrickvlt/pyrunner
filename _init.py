@@ -37,7 +37,7 @@ os.system('mkdir pyrunner')
 # -----------------------------------------------------------
 
 customArgs = []
-customArgs.append('dev')
+customArgs.append('--dev')
 
 dev = None
 shell = None
@@ -45,11 +45,11 @@ debug = None
 
 for customArg in customArgs:
     for sysArg in sys.argv: 
-        if sysArg == 'dev':
+        if sysArg == '--dev':
             dev = True
-        if sysArg == 'shell':
+        if sysArg == '--shell':
             shell = True
-        if sysArg == 'debug':
+        if sysArg == '--debug':
             debug = True
 
 if shell is not None:
@@ -320,7 +320,8 @@ def find_css(css, timeout = 2):
             print('Trying to find css: '+str(css))
         element = browser.find_element_by_css_selector(css)
         if element.is_displayed() is True:
-            print('Found CSS: '+css)
+            if debug is not None:
+                print('Found CSS: '+css)
         else:
             return False
     wait(css)
@@ -644,7 +645,8 @@ def step(describe):
     if describe is not None:
         if shell is not None:
             browser.save_screenshot('pyrunner/'+str(current_cmd)+' - '+describe+'.png')
-        print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
+        if debug is not None:
+            print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
         current_step = current_step + 1
 
 def start(describe):
@@ -681,11 +683,14 @@ def end(describe):
         print(Style.RESET_ALL+'')
 
 
-def finished():
+def finished(group=None):
     print(Style.RESET_ALL+' ')
     print(' ')
     print(' ')
-    print('Finished running PyRunner')
+    if group is None:
+        print(Fore.GREEN+'Finished running PyRunner'+Style.RESET_ALL)
+    else :
+        print(Fore.GREEN+'Finished running Group '+str(group)+Style.RESET_ALL)
     print('Execution runtime: '+str(datetime.now()-test_time))
     print('All executions succeeded')
     print(' ')
