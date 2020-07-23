@@ -8,7 +8,24 @@ except:
 
 import _init as pr
 import _tests as test
+import sys
 
+customArgs = []
+customArgs.append('--group=')
+
+thisGroup = None
+
+for customArg in customArgs:
+    for sysArg in sys.argv:
+        sysArg = sysArg.split('=')
+        cmd = sysArg[0]
+        try:
+            val = sysArg[1]
+        except:
+            continue
+        if cmd in customArg:
+            if cmd == '--group':
+                thisGroup = val
 
 # dev mode
 def DevMode():
@@ -42,8 +59,26 @@ def RunTests():
             DevMode()
         else:
             pr.failed(e)
+            
+def RunSingleTest(thisGroup):
+    try:
+        reload(test)
+    except:
+        print('')
+    try:
+        exec('test.Group'+str(thisGroup)+'()')
+        pr.finished(str(thisGroup))
+    except Exception as e:
+        pr.failed(e)
+
 
 if pr.dev is not None:
-    DevMode()
+    if thisGroup is not None:
+        RunSingleTest(thisGroup)
+    else:
+        DevMode()
 else:
-    RunTests()
+    if thisGroup is not None:
+        RunSingleTest(thisGroup)
+    else:
+        RunTests()
