@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-
 import os
 os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 import sys
 import requests
+import subprocess
 from pushbullet import Pushbullet
 
 customArgs = []
@@ -79,15 +79,21 @@ def TestSucceeded():
             
 # Prepare Laravel
 try:
-    os.system('cp .env.testing .env')
-    os.system('php artisan key:generate')
-    os.system('php artisan config:clear')
-    os.system('php artisan migrate')
-    os.system('php artisan migrate:rollback')
-    os.system('php artisan migrate:fresh --seed')
-    os.system('npm install')
-    os.system('sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb')
-    os.system('sudo apt install -y ./google-chrome-stable_current_amd64.deb')
+    ComposerMigrate = 'ln -s /laradock/vendor vendor && composer install && cp .env.testing .env && php artisan key:generate && php artisan config:clear && php artisan migrate && php artisan migrate:rollback && php artisan migrate:fresh --seed'
+    NPM = 'npm install'
+    ChromeDriver = 'sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo apt install -y ./google-chrome-stable_current_amd64.deb'
+
+    jobs = [ComposerMigrate, NPM, ChromeDriver]
+
+    ps = []
+
+    for job in jobs:
+        p = subprocess.Popen([job],shell=True)
+        ps.append(p)
+
+    for p in ps:
+        p.wait()
+    
 except Exception as e:
     print(e)
     TestFailed()
