@@ -83,27 +83,23 @@ try:
     NPM = 'npm install'
     ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; sudo apt-get -fy install; sudo apt-get clean -y; sudo apt-get update -y; sudo apt-get upgrade -f -y --fix-missing; google-chrome --version'
 
-    # jobs = [ComposerMigrate, NPM, ChromeDriver]
+    jobs = [ComposerMigrate, NPM, ChromeDriver]
 
-    # ps = []
+    ps = []
 
-    # for job in jobs:
-    #     p = subprocess.Popen([job],shell=True)
-    #     ps.append(p)
+    for job in jobs:
+        p = subprocess.Popen([job],shell=True)
+        ps.append(p)
 
-    # for p in ps:
-    #     p.wait()
-    
-    # os.system(ComposerMigrate)
-    # os.system(NPM)
-    os.system(ChromeDriver)
+    for p in ps:
+        p.wait()
     
 except Exception as e:
     print(e)
     TestFailed()
 
 # Run python file which runs defined test functions
-# exit_code = os.system("php artisan serve --port=80 --env=testing --host=localhost & python vendor/pveltrop/pyrunner/test_app.py debug shell")
+exit_code = os.system("php artisan serve --port=80 --env=testing --host=localhost & python vendor/pveltrop/pyrunner/test_app.py debug shell")
     
 if exit_code > 0:
     TestFailed()
