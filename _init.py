@@ -53,6 +53,7 @@ for customArg in customArgs:
             debug = True
 
 if shell is not None:
+    print('Executing PyRunner in shell')
     options = webdriver.ChromeOptions()
     options.add_argument('--no-sandbox')
     options.add_argument('--headless')
@@ -67,6 +68,7 @@ if shell is not None:
     else:
         max_retries = 3
 else:
+    print('Executing PyRunner')
     options = webdriver.ChromeOptions()
     options.add_argument('--auto-open-devtools-for-tabs')
     max_retries = 2
