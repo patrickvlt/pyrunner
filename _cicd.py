@@ -83,16 +83,20 @@ try:
     NPM = 'npm install'
     ChromeDriver = 'sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo apt install -y ./google-chrome-stable_current_amd64.deb && google-chrome --version'
 
-    jobs = [ComposerMigrate, NPM, ChromeDriver]
+    # jobs = [ComposerMigrate, NPM, ChromeDriver]
 
-    ps = []
+    # ps = []
 
-    for job in jobs:
-        p = subprocess.Popen([job],shell=True)
-        ps.append(p)
+    # for job in jobs:
+    #     p = subprocess.Popen([job],shell=True)
+    #     ps.append(p)
 
-    for p in ps:
-        p.wait()
+    # for p in ps:
+    #     p.wait()
+    
+    os.system(ComposerMigrate)
+    os.system(NPM)
+    os.system(ChromeDriver)
     
 except Exception as e:
     print(e)
