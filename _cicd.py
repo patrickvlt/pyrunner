@@ -81,7 +81,7 @@ def TestSucceeded():
 try:
     ComposerMigrate = 'ln -s /laradock/vendor vendor; composer install; cp .env.testing .env; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
     NPM = 'npm install'
-    ChromeDriver = 'sudo dpkg -i google-chrome-stable_current_amd64.deb; sudo apt-get -fy install; google-chrome --version'
+    ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; sudo apt-get -fy install; google-chrome --version'
 
     # jobs = [ComposerMigrate, NPM, ChromeDriver]
 
