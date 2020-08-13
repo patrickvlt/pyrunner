@@ -44,9 +44,9 @@ class Start extends Command
         $console->info('Starting PyRunner.');
 
         $env = ($console->option('env')) ? '--env='.$console->option('env') : '';
-        $dev = ($console->option('dev')) ? 'dev' : '';
-        $debug = ($console->option('debug')) ? 'debug' : '';
-        $shell = ($console->option('shell')) ? 'shell' : '';
+        $dev = ($console->option('dev')) ? '--dev' : '';
+        $debug = ($console->option('debug')) ? '--debug' : '';
+        $shell = ($console->option('shell')) ? '--shell' : '';
 
         function RunPyrunner($console,$dev,$debug,$shell){
             $cmd = "gnome-terminal -e 'bash -c \"python vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell.";bash\"'";

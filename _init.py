@@ -38,6 +38,8 @@ os.system('mkdir pyrunner')
 
 customArgs = []
 customArgs.append('--dev')
+customArgs.append('--debug')
+customArgs.append('--shell')
 
 dev = None
 shell = None
