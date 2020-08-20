@@ -152,7 +152,11 @@ def FindString(key,content):
 # Get from .env
 f = open(('.env'), 'r')
 env = f.read()
+WEB_URL = FindString("APP_URL",env)
 SERVE_URL = FindString("APP_URL",env).split('//')[-1]
+
+os.system("echo 127.0.0.1 "+str(WEB_URL)+" | sudo tee /etc/hosts")
+os.system("sudo systemctl restart apache2")
 
 # Run python file which runs defined test functions
 exit_code = os.system("php artisan serve --port=80 --host="+str(SERVE_URL)+" & python vendor/pveltrop/pyrunner/test_app.py --debug --shell")
