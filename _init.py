@@ -36,6 +36,18 @@ os.system('mkdir pyrunner')
 # Set Up Browser
 # -----------------------------------------------------------
 
+def FindString(key,content):
+    regex = r""+key+"=.*"
+    match = re.search(regex, content)
+    match = match.group()
+    match = match.replace(key+'=','')
+    return match
+
+# Get from .env
+f = open(('.env'), 'r')
+env = f.read()
+APP_URL = FindString("APP_URL",env)
+
 customArgs = []
 customArgs.append('--dev')
 customArgs.append('--debug')
@@ -77,7 +89,7 @@ else:
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
-browser.get('http://localhost/')
+browser.get(APP_URL)
 browser.maximize_window()
 
 # -----------------------------------------------------------
