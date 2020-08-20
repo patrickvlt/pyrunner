@@ -4,6 +4,7 @@ os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/maste
 import sys
 import requests
 import subprocess
+import re
 from pushbullet import Pushbullet
 
 customArgs = []
