@@ -68,15 +68,13 @@ class Install extends Command
                     $console->line('Please refer to the documentation: https://github.com/43874/pyrunner');
                 }
             }
-            if ($console->confirm('Do you want to generate an .env.testing file from your .env? This file is necessary for Gitlab CI')){
-                if (!copy('.env', '.env.testing')) {
-                    $console->error('Failed to make a copy of your .env');
-                    $console->line('Please refer to the documentation: https://github.com/43874/pyrunner');
-                }
+            if ($console->confirm('Do you want to generate a .env.example and .env.testing file from your .env? .env.testing is necessary for Gitlab CI/CD.')){
+                exec('php artisan pyrunner:env');
+                $console->info('Generated example and testing ENVs.');
             }
             $console->info('Succesfully installed Pyrunner. Available commands:');
             $console->line('php artisan pyrunner:install');
-            $console->line('php artisan pyrunner:update');
+            $console->line('php artisan pyrunner:env');
             $console->line('php artisan pyrunner:start');
         }
 

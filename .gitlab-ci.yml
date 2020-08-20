@@ -1,45 +1,43 @@
-image: registry.gitlab.com/(group)/(repo)
+image: lecondc/laradock
 
 services:
   - mysql:5.7
 
 variables:
-  MYSQL_DATABASE: test_office
+  MYSQL_DATABASE: pyrunner_database
   MYSQL_ROOT_PASSWORD: local
   DB_HOST: mysql
   DB_USERNAME: root
-  LANG: es_ES.utf8
-  LC_ALL: es_ES.UTF-8
-  LC_LANG: es_ES.UTF-8
+  LANG: en_US.utf8
+  LC_ALL: en_US.UTF-8
+  LC_LANG: en_US.UTF-8
 
 stages:
   - test
 
 Testing App:
   stage: test
-  retry: 2
-  only: [merge_requests]
+  only:
+    - merge_requests
+
   before_script:
-    - locale -a | grep "UTF-8"
-    - export LC_ALL=$(locale -a | grep UTF-8)
-    - export LC_ALL=C.UTF-8
-    - export PYTHONIOENCODING=utf-8
+    - echo "en_US UTF-8" > /etc/locale.gen
+    - locale-gen en_US.UTF-8
+    - export LANG=en_US.UTF-8
+    - export LANGUAGE=en_US:en
+    - export LC_ALL=en_US.UTF-8
     - echo 'Testing UTF-8'
     - python -c 'print(u"\u2122");'
-    - sudo pip2 uninstall -y backports.functools-lru-cache
-    - sudo apt-get install -f -y python-backports.functools-lru-cache
+
   script:
-    - ln -s /laradock/vendor vendor
     - composer install
+    - locale -a
     - python vendor/pveltrop/pyrunner/_cicd.py --project=${CI_PROJECT_TITLE} --url=${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHA} --branch=${CI_COMMIT_REF_NAME} --author=${GITLAB_USER_EMAIL} --pushbullet=${PUSHBULLET} --slack=${SLACK} --pbchannel=${PBCHANNEL}
 
   artifacts:
     when: on_failure
     name: "${CI_BUILD_STAGE}_${CI_BUILD_REF_NAME}_FAILED"
     paths:
-      - "vendor/pveltrop/pyrunner/pyrunner"
-      - "vendor/pveltrop/pyrunner/"
-      - "pyrunner/pyrunner"
-      - "pyrunner/"
+      - "pyrunner.zip"
     untracked: false
     expire_in: 1 day
