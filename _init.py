@@ -48,6 +48,8 @@ f = open(('.env'), 'r')
 env = f.read()
 APP_URL = FindString("APP_URL",env)
 
+print('APP_URL = '+str(APP_URL))
+
 customArgs = []
 customArgs.append('--dev')
 customArgs.append('--debug')
