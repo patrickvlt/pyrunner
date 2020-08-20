@@ -71,26 +71,24 @@ def FindENV(key,content):
     return match
 
 # Overwrite DB_DATABASE in the .env with the one from the .yml
-os.system("sudo systemctl restart redis-server.service")
+os.system("sudo service redis-server start")
+os.system("redis-cli --version")
 os.system("cp .env.testing .env")
 # Get from .env
 f = open(('.env'), 'r')
 env = f.read()
 DB_ROW = FindENV("DB_DATABASE",env)
-DBPASS_ROW = FindENV("DB_PASSWORD",env)
 DB_ENV = FindValue("DB_DATABASE",env)
-DBPASS_ENV = FindValue("DB_PASSWORD",env)
 # Get from .yml
 f = open(('.gitlab-ci.yml'), 'r')
 yml = f.read()
 DB_YML = FindYML("MYSQL_DATABASE",yml)
 DBPASS_YML = FindYML("MYSQL_ROOT_PASSWORD",yml)
 DB_DATABASE = DB_ROW.replace(DB_ENV,DB_YML)
-DB_PASSWORD = DBPASS_ROW.replace(DBPASS_ENV,DBPASS_YML)
 f = open(('.env'), 'r')
 oldContent = f.read()
 newContent = re.sub(DB_ROW, DB_DATABASE, oldContent)
-newContent = re.sub(DBPASS_ROW, DB_PASSWORD, newContent)
+newContent = re.sub('DB_PASSWORD=', 'DB_PASSWORD='+str(DBPASS_YML), newContent)
 open_file = open('.env', "wt")
 open_file.write(newContent)
 open_file.close()
