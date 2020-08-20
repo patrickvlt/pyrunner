@@ -50,6 +50,44 @@ for customArg in customArgs:
 
 setup = 1
 
+def FindYML(key,content):
+    regex = r""+key+": .*"
+    match = re.search(regex, content)
+    match = match.group()
+    match = match.replace(key+': ','')
+    return match
+
+def FindValue(key,content):
+    regex = r""+key+"=.*"
+    match = re.search(regex, content)
+    match = match.group()
+    match = match.replace(key+'=','')
+    return match
+
+def FindENV(key,content):
+    regex = r""+key+"=.*"
+    match = re.search(regex, content)
+    match = match.group()
+    return match
+
+# Overwrite DB_DATABASE in the .env with the one from the .yml
+os.system("cp .env.testing .env")
+# Get from .env
+f = open(('.env'), 'r')
+env = f.read()
+DB_ROW = FindENV("DB_DATABASE",env)
+DB_ENV = FindValue("DB_DATABASE",env)
+# Get from .yml
+f = open(('.gitlab-ci.yml'), 'r')
+yml = f.read()
+DB_YML = FindYML("MYSQL_DATABASE",yml)
+DB_DATABASE = DB_ROW.replace(DB_ENV,DB_YML)
+f = open(('.env'), 'r')
+oldContent = f.read()
+open_file = open('.env', "wt")
+open_file.write(re.sub(DB_ROW, DB_DATABASE, oldContent))
+open_file.close()
+
 # Sets up the Jottenheijm channel for Pushbullet and Slack
 headers = {'Content-type': 'application/json', }
 fail_msg = thisProject+": Testing branch failed: "+thisBranch+" by "+thisAuthor+" --> "+thisUrl+""
@@ -80,7 +118,7 @@ def TestSucceeded():
             
 # Prepare Laravel
 try:
-    ComposerMigrate = 'composer install; cp .env.testing .env; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
+    ComposerMigrate = 'composer install; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
     NPM = 'npm install'
     ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; google-chrome --version'
 
