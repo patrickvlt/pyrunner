@@ -81,7 +81,7 @@ def TestSucceeded():
 try:
     ComposerMigrate = 'composer install; cp .env.testing .env; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
     NPM = 'npm install'
-    ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; sudo apt-get -fy install; sudo apt-get clean -y; sudo apt-get update -y; sudo apt-get upgrade -f -y --fix-missing; google-chrome --version'
+    ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; google-chrome --version'
 
     jobs = [ComposerMigrate, NPM, ChromeDriver]
 
