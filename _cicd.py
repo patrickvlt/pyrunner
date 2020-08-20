@@ -71,6 +71,7 @@ def FindENV(key,content):
     return match
 
 # Overwrite DB_DATABASE in the .env with the one from the .yml
+os.system("sudo systemctl restart redis-server.service")
 os.system("cp .env.testing .env")
 # Get from .env
 f = open(('.env'), 'r')
