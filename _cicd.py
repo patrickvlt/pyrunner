@@ -109,10 +109,10 @@ def FindString(key,content):
 # Get from .env
 f = open(('.env'), 'r')
 env = f.read()
-APP_URL = FindString("APP_URL",env)
+SERVE_URL = FindString("APP_URL",env).split('//')[-1]
 
 # Run python file which runs defined test functions
-exit_code = os.system("php artisan serve --port=80 --host="+str(APP_URL)+" & python vendor/pveltrop/pyrunner/test_app.py --debug --shell")
+exit_code = os.system("php artisan serve --port=80 --host="+str(SERVE_URL)+" & python vendor/pveltrop/pyrunner/test_app.py --debug --shell")
     
 if exit_code > 0:
     TestFailed()
