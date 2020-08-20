@@ -4,6 +4,7 @@ namespace Pveltrop\PyRunner;
 
 use Pveltrop\PyRunner\Install;
 use Pveltrop\PyRunner\Start;
+use Pveltrop\PyRunner\ENV;
 use Illuminate\Support\ServiceProvider;
 
 class PyRunnerProvider extends ServiceProvider
@@ -14,7 +15,7 @@ class PyRunnerProvider extends ServiceProvider
         $this->commands([
             Install::class,
             Start::class,
-            Update::class,
+            ENV::class,
         ]);
     }
 }
