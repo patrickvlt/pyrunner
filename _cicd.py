@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+print('Testing UTF-8') 
+print(u"\u2122")
 import os
 os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 import sys
