@@ -155,7 +155,8 @@ env = f.read()
 WEB_URL = FindString("APP_URL",env)
 SERVE_URL = FindString("APP_URL",env).split('//')[-1]
 
-os.system("echo 127.0.0.1 "+str(SERVE_URL)+" | sudo tee /etc/hosts")
+os.system("echo '127.0.0.1 localhost' | sudo tee -a /etc/hosts")
+os.system("echo '127.0.0.1 "+str(SERVE_URL)+"' | sudo tee -a /etc/hosts")
 os.system("sudo systemctl restart apache2")
 
 # Run python file which runs defined test functions

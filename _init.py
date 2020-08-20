@@ -91,7 +91,7 @@ else:
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
-browser.get(APP_URL)
+browser.get('http://jot-logistic.test')
 browser.maximize_window()
 
 # -----------------------------------------------------------
