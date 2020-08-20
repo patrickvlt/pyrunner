@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-print('Testing UTF-8') 
-print(u"\u2122")
 import os
 os.system('pip install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt')
 import sys
@@ -99,9 +97,21 @@ try:
 except Exception as e:
     print(e)
     TestFailed()
+    
+def FindString(key,content):
+    regex = r""+key+"=.*"
+    match = re.search(regex, content)
+    match = match.group()
+    match = match.replace(key+'=','')
+    return match
+
+# Get from .env
+f = open(('.env'), 'r')
+env = f.read()
+APP_URL = FindString("APP_URL",env)
 
 # Run python file which runs defined test functions
-exit_code = os.system("php artisan serve --port=80 --env=testing --host=localhost & python vendor/pveltrop/pyrunner/test_app.py --debug --shell")
+exit_code = os.system("php artisan serve --port=80 --host="+str(APP_URL)+" & python vendor/pveltrop/pyrunner/test_app.py --debug --shell")
     
 if exit_code > 0:
     TestFailed()
