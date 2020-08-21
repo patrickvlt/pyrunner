@@ -142,8 +142,8 @@ def click(xpath=None, css=None, id=None):
             except:
                 try:
                     if debug is not None:
-                        print('Trying to click with first CSS result & JS on: '+str(css))
-                    browser.execute_script('document.querySelectorAll("'+css+'")[0].click()')
+                        print('Trying to click with CSS & Selenium on: '+str(css))
+                    browser.find_element_by_css_selector(css).click()
                     if debug is not None:
                         print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
                     return
@@ -152,8 +152,8 @@ def click(xpath=None, css=None, id=None):
                         print(Fore.RED+'CSS click failed with: ' + str(css)+Style.RESET_ALL)
                     try:
                         if debug is not None:
-                            print('Trying to click with CSS & Selenium on: '+str(css))
-                        browser.find_element_by_css_selector(css).click()
+                            print('Trying to click with first CSS result & JS on: '+str(css))
+                        browser.execute_script('document.querySelectorAll("'+css+'")[0].click()')
                         if debug is not None:
                             print(Fore.GREEN+'Clicked with css, returning'+Style.RESET_ALL)
                         return
