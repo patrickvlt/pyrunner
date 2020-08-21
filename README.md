@@ -10,7 +10,7 @@ Go to the root of your project.
 Install this package:
 
 ```
-composer require pveltrop/pyrunner
+composer require pveltrop/pyrunner:dev-master#(commit)
 ```
 
 Then install PyRunner in your Laravel project:
@@ -21,7 +21,7 @@ php artisan pyrunner:install
 Prepare your (test) database:
 
 ```
-php artisan migrate:fresh --seed --database=mysql_testing
+php artisan migrate:fresh --seed (--database=mysql_testing)
 ```
 
 Launch PyRunner to serve your project or run the tests:
@@ -58,6 +58,7 @@ If you want to re-run a single test, first literally enter:
 ```
 ipdb> reload(test)
 ```
+This will reload your _tests.py file.
 Then:
 ```
 ipdb> test.nameoftest()
@@ -74,38 +75,24 @@ This option will enable more specific output during test command executions. Thi
 # ENV
 
 ```
-php artisan pyrunner:start --env=testing
+php artisan pyrunner:env
 ```
 
-This option will make PyRunner use a specific .env.
+This option will generate a .env.example and .env.testing. Change values you want or dont want in source control.
 
 ### Configure for Laravel
 
-Use a localhost URL in your tests, as shown above in the examples. 
-The testcontainer on GitLab will only use localhost, NOT a URL defined in a hostfile 
-Summarized:
-http://www.projectname.test/ will not work. 
-http://localhost/ will work.
+Make sure your APP_URL is set correctly, to the same address as you use locally.
 
 - Make a .env.testing file, for local and GitLab testing, if you skipped this step during php artisan pyrunner:install
+
+```
+php artisan pyrunner:env
+```
+
 If this environment doesn't work locally, it won't work on GitLab either.
-- Go to config/database.php, copy the mysql array and name it mysql_testing. Change DB_DATABASE to TESTING_DB_DATABASE in mysql_testing
-- To migrate the test DB locally: 
-```
-php artisan migrate:fresh --seed --database=mysql_testing
-```
-- Define TESTING_DB_DATABASE in your local, testing and example env.
-- Make sure your .env.testing isnt in production mode, production mode will halt artisan commands with interactions!
+
 - IMPORTANT: set TELESCOPE_ENABLED=false, otherwise migrations wont work currently
-
-### GitLab CI/CD file
-
-- Add the testing database name to the variables of .gitlab-ci.yml:
-
-```
-variables:
-  MYSQL_DATABASE: (database_name)
-```
 
 ### Optional if you want to receive testresults in Slack or Pushbullet:
 
