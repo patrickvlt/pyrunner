@@ -746,7 +746,7 @@ def failed(e):
         except Exception as e:
             print(e)
         time.sleep(5)
-        if cicd is not None:
+        if cicd is not None or shell is not None:
             try:
                 with ZipFile('pyrunner.zip', 'w') as zipObj:
                 # Iterate over all the files in directory              
