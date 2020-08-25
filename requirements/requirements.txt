@@ -10,3 +10,4 @@ xlrd
 ipdb
 mysql-connector-python
 parallel-execute
+pathlib
