@@ -752,6 +752,7 @@ def failed(e):
                 # Iterate over all the files in directory              
                     for folderName, subfolders, filenames in os.walk('pyrunner'):
                         for filename in filenames:
+                            print(filename)
                             filePath = os.path.join(folderName, filename)
                             if filename == 'database.txt':
                                 try:
