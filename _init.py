@@ -54,10 +54,12 @@ customArgs = []
 customArgs.append('--dev')
 customArgs.append('--debug')
 customArgs.append('--shell')
+customArgs.append('--cicd')
 
 dev = None
 shell = None
 debug = None
+cicd = None
 
 for customArg in customArgs:
     for sysArg in sys.argv: 
@@ -67,6 +69,8 @@ for customArg in customArgs:
             shell = True
         if sysArg == '--debug':
             debug = True
+        if sysArg == '--cicd':
+            cicd = True
 
 if shell is not None:
     print('Executing PyRunner in shell')
@@ -742,7 +746,7 @@ def failed(e):
         except Exception as e:
             print(e)
         time.sleep(5)
-        if shell is not None:
+        if cicd is not None:
             try:
                 with ZipFile('pyrunner.zip', 'w') as zipObj:
                 # Iterate over all the files in directory              
