@@ -86,12 +86,14 @@ if shell is not None:
 else:
     print('Executing PyRunner')
     options = webdriver.ChromeOptions()
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--no-sandbox')
     options.add_argument('--auto-open-devtools-for-tabs')
     max_retries = 2
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
-browser.get('http://jot-logistic.test')
+browser.get('http://localhost')
 browser.maximize_window()
 
 # -----------------------------------------------------------
