@@ -252,6 +252,21 @@ def hover(selector=None):
         if selector is not None:
             print(Fore.RED+'Hovering failed on: ' + str(selector)+Style.RESET_ALL)
         print("Can't hover on: "+str(selector)+".")
+        
+def scroll_to(selector=None):
+    wait_document()
+    time.sleep(0.5)
+    try:
+        if selector is not None:
+            print('Trying to scroll to: '+str(selector))
+            element = browser.find_element_by_css_selector(selector)
+            scroll = ActionChains(browser).move_to_element(element)
+            scroll.perform()
+        return
+    except:
+        if selector is not None:
+            print(Fore.RED+'Scrolling failed to: ' + str(selector)+Style.RESET_ALL)
+        print("Can't scroll to: "+str(selector)+".")
 
 @retry(stop_max_attempt_number=max_retries)
 def switch_tab(index):
@@ -437,9 +452,17 @@ def change_text_id(id, value):
 def change_text_css(css, value):
     wait_document()
     if debug is not None:
-        print('Trying to type: '+str(value)+' in '+str(css))
-    browser.find_element_by_css_selector(css).clear()
-    browser.find_element_by_css_selector(css).send_keys(value)
+        browser.find_element_by_css_selector(css).clear()
+        browser.find_element_by_css_selector(css).send_keys(value)
+    
+def type_tinymce(selector, value):
+    wait_document()
+    value = value.replace('\n',' ')
+    if debug is not None:
+        print('Trying to type: '+str(value)+' in TinyMCE with selector: '+str(selector))
+    print("tinymce.get(\""+str(selector)+"\").setContent(\""+str(value)+"\", {format: \"raw\"});")
+    browser.execute_script("tinymce.get(\""+str(selector)+"\").setContent(\""+str(value)+"\", {format: \"raw\"});")
+
 
 # -----------------------------------------------------------
 # Code refactoring
