@@ -39,5 +39,6 @@ Testing App:
     name: "${CI_BUILD_STAGE}_${CI_BUILD_REF_NAME}_FAILED"
     paths:
       - "pyrunner.zip"
+      - "record.mkv"
     untracked: false
     expire_in: 1 day
