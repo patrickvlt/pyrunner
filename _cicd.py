@@ -5,6 +5,7 @@ import sys
 import requests
 import subprocess
 import re
+import pathlib
 from pushbullet import Pushbullet
 
 customArgs = []
@@ -78,6 +79,7 @@ os.system("cp .env.testing .env")
 f = open(('.env'), 'r')
 env = f.read()
 DB_ROW = FindENV("DB_DATABASE",env)
+URL_ROW = FindENV("APP_URL",env)
 DB_ENV = FindValue("DB_DATABASE",env)
 # Get from .yml
 f = open(('.gitlab-ci.yml'), 'r')
@@ -89,6 +91,7 @@ f = open(('.env'), 'r')
 oldContent = f.read()
 newContent = re.sub(DB_ROW, DB_DATABASE, oldContent)
 newContent = re.sub('DB_PASSWORD=', 'DB_PASSWORD='+str(DBPASS_YML), newContent)
+newContent = re.sub(URL_ROW, 'APP_URL=http://localhost', newContent)
 open_file = open('.env', "wt")
 open_file.write(newContent)
 open_file.close()
@@ -155,12 +158,15 @@ env = f.read()
 WEB_URL = FindString("APP_URL",env)
 SERVE_URL = FindString("APP_URL",env).split('//')[-1]
 
-os.system("echo '127.0.0.1 localhost' | sudo tee -a /etc/hosts")
-os.system("echo '127.0.0.1 "+str(SERVE_URL)+"' | sudo tee -a /etc/hosts")
-os.system("sudo systemctl restart apache2")
+# Serve project
+os.system("php artisan serve --port=80 --host=localhost &")
 
-# Run python file which runs defined test functions
-exit_code = os.system("php artisan serve --port=80 --host="+str(SERVE_URL)+" & python vendor/pveltrop/pyrunner/test_app.py --debug --shell")
+# Recording and running
+os.system("sleep 1; ffmpeg -r 30 -f x11grab -draw_mouse 0 -s 1920x1080 -i :99 -c:v libvpx -quality realtime -cpu-used 0 -b:v 384k -qmin 42 -qmax 42 -maxrate 200k -bufsize 1000k -an record.mkv &")
+exit_code = os.system("xvfb-run --server-num 99 --auth-file /tmp/xvfb.auth -s '-ac -screen 0 1920x1080x24' python vendor/pveltrop/pyrunner/test_app.py --debug --cicd")
+os.system("killall -r xvfb")
+os.system("killall -r ffmpeg")
+os.system('sudo find . -name "*record.mkv*"')
     
 if exit_code > 0:
     TestFailed()
