@@ -48,16 +48,18 @@ class Start extends Command
         $debug = ($console->option('debug')) ? '--debug' : '';
         $shell = ($console->option('shell')) ? '--shell' : '';
 
-        $cmd = "gnome-terminal -e 'bash -c \"python vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell.";bash\"'";
+        // $cmd = "gnome-terminal -e 'bash -c \"python vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell.";bash\"'";
+        $cmd = "python vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell;
         exec($cmd, $output, $return);
         if ($return != 0) {
-            $cmd = "gnome-terminal -e 'bash -c \"python3 vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell.";bash\"'";
+            $cmd = "python3 vendor/pveltrop/pyrunner/test_app.py ".$dev." ".$debug." ".$shell;
             exec($cmd, $output, $returnTwo);
             if ($returnTwo != 0){
-                $cmd = 'start "test" cmd.exe /k "python vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
+                // $cmd = 'start "test" cmd.exe /k "python vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
+                $cmd = 'python vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell;
                 exec($cmd, $output, $return);
                 if ($return != 0) {
-                    $cmd = 'start "test" cmd.exe /k "python3 vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell.'"';
+                    $cmd = 'python3 vendor/pveltrop/pyrunner/test_app.py '.$dev.' '.$debug.' '.$shell;
                     exec($cmd, $output, $returnTwo);
                     if ($returnTwo != 0){
                         $console->error('Can\'t launch PyRunner.');
