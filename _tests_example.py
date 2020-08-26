@@ -20,6 +20,9 @@ else:
 # Refactoring/scanning
 # -----------------------------------------------------------
 
+# Go to defined APP_URL in .env first
+pr.get(pr.APP_URL)
+
 def scan_for_dd():
     pr.start('Check if all dd() is removed from code')
     pr.step('Scan files with RegEx')
@@ -44,7 +47,7 @@ def generate_tests_list():
 def users_can_register():
     pr.start('Users Can Register')
     pr.step('Go to register page') 
-    pr.browser.get('http://localhost/register')
+    pr.browser.get(pr.APP_URL+'/register')
     pr.step('Company Name') 
     pr.change_text_xpath('//*[@id="name"]', fake.company())
     pr.step('KvK') 
@@ -81,11 +84,11 @@ def users_can_register():
 def users_can_request_password():
     pr.start('Users Can Request Password')
     pr.step('Logout first') 
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Click Password Forgot') 
     pr.click('/html/body/div/div/div/div[2]/div[2]/div/form/div[3]/a','.kt-login__link-forgot')
     pr.step('Password Forgot') 
-    pr.browser.get('http://localhost/forgot/')
+    pr.browser.get(pr.APP_URL+'/forgot/')
     pr.step('E-mail') 
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Request Password') 
@@ -98,7 +101,7 @@ def users_can_request_password():
 def users_can_login():
     pr.start('Users Can Login')
     pr.step('Logout first') 
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Enter email') 
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password') 
@@ -111,9 +114,9 @@ def users_can_login():
 def users_can_create_sending():
     pr.start('Users Can Create Normal Sending')
     pr.step('Logout first') 
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Authenticate This User') 
-    requests.get('http://localhost/_testing/pyauthenticate/'+pyUserEmail+'').text
+    requests.get(pr.APP_URL+'/_testing/pyauthenticate/'+pyUserEmail+'').text
     pr.step('Enter email') 
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password') 
@@ -121,7 +124,7 @@ def users_can_create_sending():
     pr.step('Login') 
     pr.click('//*[@id="kt_login_signin_submit"]','#kt_login_signin_submit','kt_login_signin_submit')
     pr.step('Go To Create Sending') 
-    pr.browser.get('http://localhost/sending/create')
+    pr.browser.get(pr.APP_URL+'/sending/create')
     pr.step('Normal Sending') 
     pr.browser.execute_script("$('input[name=normal_sending][id=normal_sending]').click()")
     pr.step('Pickup Contact Person') 
@@ -204,9 +207,9 @@ def users_can_create_sending():
 def users_can_create_priority_sending():
     pr.start('Users Can Create Priority Sending')
     pr.step('Logout first') 
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Authenticate This User') 
-    requests.get('http://localhost/_testing/pyauthenticate/'+pyUserEmail+'').text
+    requests.get(pr.APP_URL+'/_testing/pyauthenticate/'+pyUserEmail+'').text
     pr.step('Enter email') 
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password') 
@@ -214,7 +217,7 @@ def users_can_create_priority_sending():
     pr.step('Login') 
     pr.click('//*[@id="kt_login_signin_submit"]','#kt_login_signin_submit','kt_login_signin_submit')
     pr.step('Go To Create Sending') 
-    pr.browser.get('http://localhost/sending/create')
+    pr.browser.get(pr.APP_URL+'/sending/create')
     pr.step('Priority Sending') 
     pr.browser.execute_script("$('input[name=priority][id=priority_sending]').click()")
     pr.step('Pickup Contact Person') 
@@ -291,9 +294,9 @@ def users_can_create_priority_sending():
 def users_can_view_profile():
     pr.start('Users Can View Profile')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Authenticate This User') 
-    requests.get('http://localhost/_testing/pyauthenticate/'+pyUserEmail+'').text
+    requests.get(pr.APP_URL+'/_testing/pyauthenticate/'+pyUserEmail+'').text
     pr.step('Enter email')
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password')
@@ -306,7 +309,7 @@ def users_can_view_profile():
     pr.step('Click Profile')
     pr.click('//a[href="/profile/edit"]','a[href="/profile/edit"]')
     pr.step('Go to Profile')
-    pr.browser.get('http://localhost/profile/edit')
+    pr.browser.get(pr.APP_URL+'/profile/edit')
     pr.step('Change Country')
     pr.select_value_name('country', str(random.randint(1, 100)))
     pr.step('Change Street')
@@ -327,9 +330,9 @@ def users_can_view_profile():
 def users_can_crud_address():
     pr.start('Users Can Create Address')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Authenticate This User') 
-    requests.get('http://localhost/_testing/pyauthenticate/'+pyUserEmail+'').text
+    requests.get(pr.APP_URL+'/_testing/pyauthenticate/'+pyUserEmail+'').text
     pr.step('Enter email')
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password')
@@ -339,7 +342,7 @@ def users_can_crud_address():
     pr.step('Find Create Address')
     pr.find_xpath('//*[@id="kt_aside_menu"]/ul[3]/li[3]/a')
     pr.step('Go To Create Address')
-    pr.browser.get('http://localhost/address/create')
+    pr.browser.get(pr.APP_URL+'/address/create')
     pr.step('Fill in Company Name')
     pr.change_text_xpath('//*[@id="company"]', fake.company())
     pr.step('Country')
@@ -414,9 +417,9 @@ def users_can_crud_address():
 def users_can_crud_contact():
     pr.start('Users Can Create Contact')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Authenticate This User') 
-    requests.get('http://localhost/_testing/pyauthenticate/'+pyUserEmail+'').text
+    requests.get(pr.APP_URL+'/_testing/pyauthenticate/'+pyUserEmail+'').text
     pr.step('Enter email')
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password')
@@ -424,7 +427,7 @@ def users_can_crud_contact():
     pr.step('Login')
     pr.click('//*[@id="kt_login_signin_submit"]','#kt_login_signin_submit','kt_login_signin_submit')
     pr.step('Go To Create Contact')
-    pr.browser.get('http://localhost/contactperson/create')
+    pr.browser.get(pr.APP_URL+'/contactperson/create')
     pr.time.sleep(2)
     pr.step('Company')
     pr.select_index_id('company', "1")
@@ -490,9 +493,9 @@ def users_can_crud_contact():
 def users_can_view_sending():
     pr.start('Users Can View Sending and Document')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Authenticate This User') 
-    requests.get('http://localhost/_testing/pyauthenticate/'+pyUserEmail+'').text
+    requests.get(pr.APP_URL+'/_testing/pyauthenticate/'+pyUserEmail+'').text
     pr.step('Enter email')
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password')
@@ -500,7 +503,7 @@ def users_can_view_sending():
     pr.step('Login')
     pr.click('//*[@id="kt_login_signin_submit"]','#kt_login_signin_submit','kt_login_signin_submit')
     pr.step('Go to Sending Overview')
-    pr.browser.get('http://localhost/sending')
+    pr.browser.get(pr.APP_URL+'/sending')
     pr.time.sleep(2)
     pr.step('View Sending')
     pr.click('//*[@id="sendingsDatatable"]/tbody/tr/td[12]/div/a','#sendingsDatatable > tbody > tr > td.editTD.clickable.text-center > div > a')
@@ -523,13 +526,13 @@ def users_can_view_sending():
 def admins_can_crud_admin():
     pr.start('Admins Can Create Admin')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Login as Admin')
-    pr.browser.get('http://localhost/_testing/pyloginadmin/')
+    pr.browser.get(pr.APP_URL+'/_testing/pyloginadmin/')
     pr.step('Find Create Admin')
     pr.find_xpath('//*[@id="btnAdminCreate"]')
     pr.step('Go to Create Admin')
-    pr.browser.get('http://localhost/admin/create')
+    pr.browser.get(pr.APP_URL+'/admin/create')
     pr.step('Name')
     pr.change_text_xpath('//*[@id="name"]', fake.name())
     pr.step('Language')
@@ -620,13 +623,13 @@ def admins_can_crud_admin():
 def admins_can_crud_company():
     pr.start('Admins Can View Companies')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Login as Admin')
-    pr.browser.get('http://localhost/_testing/pyloginadmin/')
+    pr.browser.get(pr.APP_URL+'/_testing/pyloginadmin/')
     pr.step('Find Company Overview')
     pr.find_xpath('//*[@id="btnCompanyOverview"]')
     pr.step('Go to Company Overview')
-    pr.browser.get('http://localhost/company')
+    pr.browser.get(pr.APP_URL+'/company')
     pr.step('Company datatable')
     pr.find_xpath('//*[@id="companiesDatatable_wrapper"]')
     pr.end('Admins Can View Companies')
@@ -708,13 +711,13 @@ def admins_can_crud_company():
 def admins_can_edit_sending():
     pr.start('Admins Can Edit Sending')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Login as Admin')
-    pr.browser.get('http://localhost/_testing/pyloginadmin/')
+    pr.browser.get(pr.APP_URL+'/_testing/pyloginadmin/')
     pr.step('Find Sending Overview Link')
     pr.find_css('#kt_aside_menu > ul:nth-child(2) > li.kt-menu__item > a')
     pr.step('Go to Sending Overview')
-    pr.browser.get('http://localhost/sending')
+    pr.browser.get(pr.APP_URL+'/sending')
     pr.time.sleep(2)
     pr.step('Edit a sending')
     pr.click('//.divDTBlue','.divDTBlue')
@@ -811,9 +814,9 @@ def admins_can_edit_sending():
 def users_can_approve_and_deny_sendings():
     pr.start('Users Can Approve And Deny Prices')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Authenticate This User') 
-    requests.get('http://localhost/_testing/pyauthenticate/'+pyUserEmail+'')
+    requests.get(pr.APP_URL+'/_testing/pyauthenticate/'+pyUserEmail+'')
     pr.step('Enter email')
     pr.change_text_xpath('//*[@id="email"]', pyUserEmail)
     pr.step('Enter password')
@@ -821,10 +824,10 @@ def users_can_approve_and_deny_sendings():
     pr.step('Login')
     pr.click('//*[@id="kt_login_signin_submit"]','#kt_login_signin_submit','kt_login_signin_submit')
     pr.step('Go to Sending Overview')
-    pr.browser.get('http://localhost/sending')
+    pr.browser.get(pr.APP_URL+'/sending')
     pr.time.sleep(2)
     pr.step('Fill with sending to agree and deny')
-    pr.browser.get('http://localhost/_testing/createsendingswithprice')
+    pr.browser.get(pr.APP_URL+'/_testing/createsendingswithprice')
     pr.step('Click on deny icon')
     pr.click('//*[@id="dnSndIcon"]','#dnSndIcon','dnSndIcon')
     pr.step('Get Warning')
@@ -866,11 +869,11 @@ def users_can_approve_and_deny_sendings():
 def admins_can_change_status_modal():
     pr.start('Admins Can Change Status in Modal')
     pr.step('Logout first')
-    pr.browser.get('http://localhost/_testing/pylogout')
+    pr.browser.get(pr.APP_URL+'/_testing/pylogout')
     pr.step('Login as Admin')
-    pr.browser.get('http://localhost/_testing/pyloginadmin/')
+    pr.browser.get(pr.APP_URL+'/_testing/pyloginadmin/')
     pr.step('Go to Sending Overview')
-    pr.browser.get('http://localhost/sending')
+    pr.browser.get(pr.APP_URL+'/sending')
     pr.time.sleep(2)
     pr.step('Open Status Modal')
     pr.click('//*[@id="sendingsDatatable"]/tbody/tr[1]/td[11]/div/p','#sendingsDatatable > tbody > tr:nth-child(1) > td.statusTD.openStatus.text-center > div > p')
