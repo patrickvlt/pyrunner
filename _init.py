@@ -48,8 +48,6 @@ f = open(('.env'), 'r')
 env = f.read()
 APP_URL = FindString("APP_URL",env)
 
-print('APP_URL = '+str(APP_URL))
-
 customArgs = []
 customArgs.append('--dev')
 customArgs.append('--debug')
@@ -680,8 +678,6 @@ def start(describe):
     current_step = 1
     if describe is not None:
         current_test = describe
-        if shell is not None or cicd is not None:
-            browser.save_screenshot('pyrunner/Test Start: '+str(describe)+'.png')
         print(' ')
         print(' ')
         print('────────────────────────────────────────────────────────────────────────────────────────────────────')
@@ -695,8 +691,6 @@ def start(describe):
 def end(describe):
     wait_document()
     if describe is not None:
-        if shell is not None or cicd is not None:
-            browser.save_screenshot('pyrunner/Test End: '+str(describe)+'.png')
         print(Fore.GREEN+'')
         print(' ')
         print('----------------------------------------------------------------------------------------------------')
@@ -752,7 +746,6 @@ def failed(e):
                 # Iterate over all the files in directory              
                     for folderName, subfolders, filenames in os.walk('pyrunner'):
                         for filename in filenames:
-                            print(filename)
                             filePath = os.path.join(folderName, filename)
                             if filename == 'database.txt':
                                 try:
