@@ -667,7 +667,7 @@ def step(describe):
     step_desc = describe
     current_cmd = current_cmd + 1
     if describe is not None:
-        if shell is not None:
+        if shell is not None or cicd is not None:
             browser.save_screenshot('pyrunner/'+str(current_cmd)+' - '+describe+'.png')
         if debug is not None:
             print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
@@ -680,7 +680,7 @@ def start(describe):
     current_step = 1
     if describe is not None:
         current_test = describe
-        if shell is not None:
+        if shell is not None or cicd is not None:
             browser.save_screenshot('pyrunner/Test Start: '+str(describe)+'.png')
         print(' ')
         print(' ')
@@ -695,7 +695,7 @@ def start(describe):
 def end(describe):
     wait_document()
     if describe is not None:
-        if shell is not None:
+        if shell is not None or cicd is not None:
             browser.save_screenshot('pyrunner/Test End: '+str(describe)+'.png')
         print(Fore.GREEN+'')
         print(' ')
