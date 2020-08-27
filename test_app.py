@@ -1,6 +1,107 @@
 # -*- coding: utf-8 -*-
 
-import requests
-open('vendor/pveltrop/pyrunner/_update.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_update.py').content)
-open('vendor/pveltrop/pyrunner/_runner.py', 'wb').write(requests.get('https://raw.githubusercontent.com/43874/pyrunner/master/_runner.py').content)
-import _runner
+# load tests and chromedriver
+try:
+    from importlib import reload
+except:
+    print('Reloading module couldn\'t be loaded. Dev mode won\'t see file changes.')
+
+import _init as pr
+import _tests as tests
+import sys, inspect, re
+
+customArgs = []
+customArgs.append('--group=')
+
+thisGroup = None
+testList = []
+failedTests = []
+
+for customArg in customArgs:
+    for sysArg in sys.argv:
+        sysArg = sysArg.split('=')
+        cmd = sysArg[0]
+        try:
+            val = sysArg[1]
+        except:
+            continue
+        if cmd in customArg:
+            if cmd == '--group':
+                thisGroup = val
+                
+sourceTests = inspect.getsource(tests.RunTests)
+definedTests = re.finditer(r".*_\S*\(.*\)", sourceTests, re.MULTILINE)
+for definedTest in definedTests:
+    if "#" not in definedTest.group():
+        testList.append(definedTest.group())
+
+# dev mode
+def DevMode():
+    print(pr.Fore.CYAN+'Developing mode initialised')
+    print(' ')
+    print(' ')
+    print('To run a single PyRunner cmd: pr.click(element_to_click)'+pr.Style.RESET_ALL)
+    print(' ')
+    print('To run a single test, reload your defined tests: ')
+    print('reload(tests)')
+    print('Then run your test:')
+    print('tests.yourTestName(parameters)')
+    print(' ')
+    print('To run all your tests:')
+    print('RunTests()')
+    print(' ')
+    pr.ipdb.set_trace(context=1)
+    
+def RunTests():
+    try:
+        reload(tests)
+    except:
+        print('')
+    for definedTest in testList:
+        if "#" not in definedTest:
+            try:
+                cmd = 'tests.'+definedTest
+                exec(cmd)
+            except Exception as e:
+                failedTests.append({
+                    'test': definedTest,
+                    'error': e
+                })
+                pass
+        exit
+    if not failedTests:
+        pr.finished()
+    else:
+        if pr.dev is not None:
+            for failed in failedTests:
+                print(' ')
+                print(pr.Style.RESET_ALL+'Failed test: '+pr.Fore.RED+str(failed['test']))
+                print(pr.Style.RESET_ALL+'Error: '+pr.Fore.RED+str(failed['error']))
+                print(' ')
+                print(' ')
+            DevMode()
+        else:
+            pr.failed(failedTests)
+            
+def RunSingleTest(thisGroup):
+    try:
+        reload(tests)
+    except:
+        print('')
+    try:
+        exec('test.Group'+str(thisGroup)+'()')
+        pr.finished(str(thisGroup))
+    except Exception as e:
+        pr.failed(e)
+
+
+if pr.dev is not None:
+    if thisGroup is not None:
+        RunSingleTest(thisGroup)
+    else:
+        DevMode()
+else:
+    if thisGroup is not None:
+        RunSingleTest(thisGroup)
+    else:
+        RunTests()

@@ -80,7 +80,6 @@ if shell is not None:
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-web-security')
     options.add_argument('--allow-running-insecure-content')
-    options.add_argument('window-size=1920x1080')
     if dev is not None:
         max_retries = 0
     else:
@@ -93,6 +92,10 @@ else:
     options.add_argument('--auto-open-devtools-for-tabs')
     max_retries = 0
     
+if cicd is not None:
+    options.add_argument('window-size=1920x1080')
+    max_retries = 1
+    
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
 browser.get('http://localhost')
@@ -104,6 +107,7 @@ browser.maximize_window()
     
 current_step = 0
 current_cmd = 0
+describe = None
 test_time=datetime.now()
 failProject = None
 step_desc = None
@@ -112,7 +116,6 @@ current_test = None
 def wait_document(timeout=20):
     wait = WebDriverWait(browser, timeout)
     try:
-        # wait.until(lambda browser: browser.execute_script('return jQuery.active') == 0)
         wait.until(lambda browser: browser.execute_script('return document.readyState') == 'complete')
     except Exception as e:
         pass
@@ -131,7 +134,7 @@ def get(url=''):
 
 @retry(stop_max_attempt_number=max_retries)
 def click(xpath=None, css=None, id=None):
-    wait_document()
+    wait_document(4)
     wait_ajax(1.25)
     time.sleep(0.5)
     def Click(css, xpath, id):
@@ -252,6 +255,7 @@ def hover(selector=None):
         if selector is not None:
             print(Fore.RED+'Hovering failed on: ' + str(selector)+Style.RESET_ALL)
         print("Can't hover on: "+str(selector)+".")
+    time.sleep(1.5)
         
 def scroll_to(selector=None):
     wait_document()
@@ -743,7 +747,7 @@ def finished(group=None):
     exit()
 
 
-def failed(e):
+def failed(failedTests):
         print(Style.RESET_ALL+' ')
         print('----------------------------------------------------------------------------------------------------')
         print(' ')
@@ -751,12 +755,11 @@ def failed(e):
         print('Execution runtime: '+str(datetime.now()-test_time))
         print(' ')
         print('----------------------------------------------------------------------------------------------------')
-        print(' ')
-        print(Fore.RED+'Failed at: '+str(current_test))
-        print(Style.RESET_ALL+'Step '+str(current_step-1)+": "+str(step_desc))
-        print(' ')
-        print(str(e))
-        print('')
+        for failed in failedTests:
+            print(' ')
+            print(Style.RESET_ALL+'Failed test: '+Fore.RED+str(failed['test']))
+            print(Style.RESET_ALL+'Error: '+Fore.RED+str(failed['error']))
+            print(' ')
         print(' ')
         try:
             browser.save_screenshot('pyrunner/failed_state.png')
