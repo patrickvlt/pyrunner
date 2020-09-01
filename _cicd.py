@@ -9,6 +9,7 @@ import pathlib
 from pushbullet import Pushbullet
 
 customArgs = []
+customArgs.append('-r')
 customArgs.append('--project=')
 customArgs.append('--url=')
 customArgs.append('--branch=')
@@ -24,6 +25,7 @@ thisAuthor = None
 thisPushbullet = None
 thisSlack = None
 thisPbchannel = None
+record = None
 
 for customArg in customArgs:
     for sysArg in sys.argv:
@@ -48,6 +50,8 @@ for customArg in customArgs:
                 thisPbchannel = val
             if cmd == '--slack':
                 thisSlack = val
+            if cmd == '-r':
+                record = True
 
 setup = 1
 
@@ -128,7 +132,7 @@ def TestSucceeded():
 try:
     ComposerMigrate = 'composer install; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
     NPM = 'npm install'
-    ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; google-chrome --version'
+    ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; google-chrome --version; sudo apt-get install -f -y cpulimit'
 
     jobs = [ComposerMigrate, NPM, ChromeDriver]
 
@@ -162,7 +166,11 @@ SERVE_URL = FindString("APP_URL",env).split('//')[-1]
 os.system("php artisan serve --port=80 --host=localhost &")
 
 # Recording and running
-os.system("sleep 1; ffmpeg -r 30 -f x11grab -draw_mouse 0 -s 1920x1080 -i :99 -c:v libvpx -quality realtime -cpu-used 0 -b:v 384k -qmin 42 -qmax 42 -maxrate 200k -bufsize 1000k -an record.mkv &")
+if record is not None:
+    os.system("sleep 1; ffmpeg -r 30 -f x11grab -draw_mouse 0 -s 1920x1080 -i :99 -c:v libvpx -quality realtime -cpu-used 0 -b:v 384k -qmin 42 -qmax 42 -maxrate 200k -bufsize 1000k -an record.mkv &")
+try:
+    os.system("cpulimit -v -e chrome -l 40 &")
+    
 exit_code = os.system("xvfb-run --server-num 99 --auth-file /tmp/xvfb.auth -s '-ac -screen 0 1920x1080x24' python vendor/pveltrop/pyrunner/test_app.py --debug --cicd")
 os.system("killall -r xvfb")
 os.system("killall -r ffmpeg")
