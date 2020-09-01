@@ -702,7 +702,6 @@ def start(describe):
     wait_document()
     global current_step
     global current_test
-    current_step = 1
     if describe is not None:
         current_test = describe
         print(' ')
