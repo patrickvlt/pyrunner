@@ -93,7 +93,7 @@ else:
     options.add_argument('--auto-open-devtools-for-tabs')
     
 if cicd is not None:
-    max_retries = 3
+    max_retries = 2
     max_clicks = 1
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
@@ -134,9 +134,7 @@ def get(url=''):
 
 @retry(stop_max_attempt_number=max_clicks)
 def click(xpath=None, css=None, id=None):
-    wait_document(4)
-    wait_ajax(1.25)
-    time.sleep(0.5)
+    wait_document()
     def Click(css, xpath, id):
         if css is not None:
             try:
@@ -227,7 +225,6 @@ def click(xpath=None, css=None, id=None):
 @retry(stop_max_attempt_number=max_retries)
 def select2(selector=None, cmd=None):
     wait_document()
-    time.sleep(0.5)
     try:
         if selector is not None and cmd is not None:
             print('Trying to execute command on select2 element(s): '+str(selector))
@@ -243,7 +240,6 @@ def select2(selector=None, cmd=None):
 @retry(stop_max_attempt_number=max_retries)
 def hover(selector=None):
     wait_document()
-    time.sleep(0.5)
     try:
         if selector is not None:
             print('Trying to hover on: '+str(selector))
@@ -260,7 +256,6 @@ def hover(selector=None):
 @retry(stop_max_attempt_number=max_retries)
 def scroll_to(selector=None):
     wait_document()
-    time.sleep(0.5)
     try:
         if selector is not None:
             print('Trying to scroll to: '+str(selector))
@@ -313,89 +308,70 @@ def select_index_id(id, index):
         "//select[@id='"+id+"']/option["+index+"]").click()
     
 @retry(stop_max_attempt_number=max_retries)
-# Finding elements, these functions will retry based on the timeout variable you send along
-def find_text(text, timeout = 2):
+def find_text(text):
     wait_document()
-    @retry(stop_max_attempt_number=timeout)
-    def wait(text):
-        if debug is not None:
-            print('Trying to find text: '+str(text))
-        element = browser.find_element_by_xpath(
-            "//*[contains(text(), '"+text+"')]")
-        if element.is_displayed() is False:
-            return False
-        wait(text)
+    if debug is not None:
+        print('Trying to find text: '+str(text))
+    element = browser.find_element_by_xpath(
+        "//*[contains(text(), '"+text+"')]")
+    if element.is_displayed() is False:
+        return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_id(id, timeout = 2):
+def find_id(id):
     wait_document()
-    @retry(stop_max_attempt_number=timeout)
-    def wait(id):
-        if debug is not None:
-            print('Trying to find ID: '+str(id))
-        element = browser.find_element_by_id(id)
-        if element.is_displayed() is True:
-            print('Found ID: '+id)
-        else:
-            return False
-    wait(id)
+    if debug is not None:
+        print('Trying to find ID: '+str(id))
+    element = browser.find_element_by_id(id)
+    if element.is_displayed() is True:
+        print('Found ID: '+id)
+    else:
+        return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_class(el_class, timeout = 2):
+def find_class(el_class):
     wait_document()
-    @retry(stop_max_attempt_number=timeout)
-    def wait(el_class):
-        if debug is not None:
-            print('Trying to find class: '+str(el_class))
-        element = browser.find_element_by_class_name(el_class)
-        if element.is_displayed() is True:
-            print('Found class: '+el_class)
-        else:
-            return False
-    wait(el_class)
+    if debug is not None:
+        print('Trying to find class: '+str(el_class))
+    element = browser.find_element_by_class_name(el_class)
+    if element.is_displayed() is True:
+        print('Found class: '+el_class)
+    else:
+        return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_css(css, timeout = 2):
+def find_css(css):
     wait_document()
-    @retry(stop_max_attempt_number=timeout)
-    def wait(css):
+    if debug is not None:
+        print('Trying to find css: '+str(css))
+    element = browser.find_element_by_css_selector(css)
+    if element.is_displayed() is True:
         if debug is not None:
-            print('Trying to find css: '+str(css))
-        element = browser.find_element_by_css_selector(css)
-        if element.is_displayed() is True:
-            if debug is not None:
-                print('Found CSS: '+css)
-        else:
-            return False
-    wait(css)
+            print('Found CSS: '+css)
+    else:
+        return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_name(name, timeout = 2):
+def find_name(name):
     wait_document()
-    @retry(stop_max_attempt_number=timeout)
-    def wait(name):
-        if debug is not None:
-            print('Trying to find name: '+str(name))
-        element = browser.find_element_by_name(name)
-        if element.is_displayed() is True:
-            print('Found name: '+name)
-        else:
-            return False
-    wait(name)
+    if debug is not None:
+        print('Trying to find name: '+str(name))
+    element = browser.find_element_by_name(name)
+    if element.is_displayed() is True:
+        print('Found name: '+name)
+    else:
+        return False
     
 @retry(stop_max_attempt_number=max_retries)
-def find_xpath(xpath, timeout = 2):
+def find_xpath(xpath):
     wait_document()
-    @retry(stop_max_attempt_number=timeout)
-    def wait(xpath):
-        if debug is not None:
-            print('Trying to find Xpath: '+str(xpath))
-        element = browser.find_element_by_xpath(xpath)
-        if element.is_displayed() is True:
-            print('Found XPath: '+xpath)
-        else:
-            return False
-    wait(xpath)
+    if debug is not None:
+        print('Trying to find Xpath: '+str(xpath))
+    element = browser.find_element_by_xpath(xpath)
+    if element.is_displayed() is True:
+        print('Found XPath: '+xpath)
+    else:
+        return False
 
 # Typing
 
