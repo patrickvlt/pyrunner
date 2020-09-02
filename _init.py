@@ -96,6 +96,7 @@ else:
 if cicd is not None:
     max_retries = 2
     max_clicks = 1
+    implicitWait = 4
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(1)
