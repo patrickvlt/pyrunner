@@ -97,7 +97,7 @@ if cicd is not None:
     max_clicks = 1
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
-browser.implicitly_wait(10)
+browser.implicitly_wait(1)
 browser.get('http://localhost')
 browser.maximize_window()
 
