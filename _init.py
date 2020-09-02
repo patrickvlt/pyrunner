@@ -94,7 +94,7 @@ else:
     
 if cicd is not None:
     options.add_argument('window-size=1920x1080')
-    max_retries = 1
+    max_retries = 3
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
@@ -132,7 +132,7 @@ def get(url=''):
     wait_document(20)
     browser.get(url)
 
-@retry(stop_max_attempt_number=max_retries)
+@retry(stop_max_attempt_number=1)
 def click(xpath=None, css=None, id=None):
     wait_document(4)
     wait_ajax(1.25)
@@ -256,7 +256,8 @@ def hover(selector=None):
             print(Fore.RED+'Hovering failed on: ' + str(selector)+Style.RESET_ALL)
         print("Can't hover on: "+str(selector)+".")
     time.sleep(1.5)
-        
+
+@retry(stop_max_attempt_number=max_retries)
 def scroll_to(selector=None):
     wait_document()
     time.sleep(0.5)
@@ -311,6 +312,7 @@ def select_index_id(id, index):
     browser.find_element_by_xpath(
         "//select[@id='"+id+"']/option["+index+"]").click()
     
+@retry(stop_max_attempt_number=max_retries)
 # Finding elements, these functions will retry based on the timeout variable you send along
 def find_text(text, timeout = 2):
     wait_document()
@@ -324,7 +326,7 @@ def find_text(text, timeout = 2):
             return False
         wait(text)
 
-
+@retry(stop_max_attempt_number=max_retries)
 def find_id(id, timeout = 2):
     wait_document()
     @retry(stop_max_attempt_number=timeout)
@@ -338,7 +340,7 @@ def find_id(id, timeout = 2):
             return False
     wait(id)
 
-
+@retry(stop_max_attempt_number=max_retries)
 def find_class(el_class, timeout = 2):
     wait_document()
     @retry(stop_max_attempt_number=timeout)
@@ -352,7 +354,7 @@ def find_class(el_class, timeout = 2):
             return False
     wait(el_class)
 
-
+@retry(stop_max_attempt_number=max_retries)
 def find_css(css, timeout = 2):
     wait_document()
     @retry(stop_max_attempt_number=timeout)
@@ -367,7 +369,7 @@ def find_css(css, timeout = 2):
             return False
     wait(css)
 
-
+@retry(stop_max_attempt_number=max_retries)
 def find_name(name, timeout = 2):
     wait_document()
     @retry(stop_max_attempt_number=timeout)
@@ -381,6 +383,7 @@ def find_name(name, timeout = 2):
             return False
     wait(name)
     
+@retry(stop_max_attempt_number=max_retries)
 def find_xpath(xpath, timeout = 2):
     wait_document()
     @retry(stop_max_attempt_number=timeout)
@@ -459,6 +462,7 @@ def change_text_css(css, value):
         browser.find_element_by_css_selector(css).clear()
         browser.find_element_by_css_selector(css).send_keys(value)
     
+@retry(stop_max_attempt_number=max_retries)
 def type_tinymce(selector, value):
     wait_document()
     value = value.replace('\n',' ')
