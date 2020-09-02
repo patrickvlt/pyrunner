@@ -63,6 +63,11 @@ def RunTests():
                 cmd = 'tests.'+definedTest
                 exec(cmd)
             except Exception as e:
+                print(' ')
+                print(pr.Style.RESET_ALL+'Failed test: '+pr.Fore.RED+str(definedTest))
+                print(pr.Style.RESET_ALL+'Error: '+pr.Fore.RED+str(e))
+                print(' ')
+                print(' ')
                 failedTests.append({
                     'test': definedTest,
                     'error': e
