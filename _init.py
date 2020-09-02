@@ -484,7 +484,7 @@ def scan_regex(regex):
         for folder in laravelFolders:
             for currentpath, folders, files in os.walk(folder):
                 for file in files:
-                    if '.php' in str(file):
+                    if '.php' in str(file) and 'vendor' not in str(currentpath):
                         laravelFiles.append(os.path.join(currentpath, file))
     LoopFolders(laravelFolders)
     # Loop through Laravel Folders and fetch php files if one of the above folders is used
