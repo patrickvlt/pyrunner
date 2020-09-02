@@ -1,7 +1,6 @@
 requests
 selenium
 colorama    
-chromedriver-py==85.0.4183.38
 pushbullet.py
 Faker
 retrying
