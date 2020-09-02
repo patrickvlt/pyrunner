@@ -59,6 +59,9 @@ shell = None
 debug = None
 cicd = None
 
+max_retries = 0
+max_clicks = 0
+
 for customArg in customArgs:
     for sysArg in sys.argv: 
         if sysArg == '--dev':
@@ -73,6 +76,7 @@ for customArg in customArgs:
 if shell is not None:
     print('Executing PyRunner in shell')
     options = webdriver.ChromeOptions()
+    options.add_argument('window-size=1920x1080')
     options.add_argument('--no-sandbox')
     options.add_argument('--headless')
     options.add_argument('headless')
@@ -80,21 +84,17 @@ if shell is not None:
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-web-security')
     options.add_argument('--allow-running-insecure-content')
-    if dev is not None:
-        max_retries = 0
-    else:
-        max_retries = 3
 else:
     print('Executing PyRunner')
     options = webdriver.ChromeOptions()
+    options.add_argument('window-size=1920x1080')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--no-sandbox')
     options.add_argument('--auto-open-devtools-for-tabs')
-    max_retries = 0
     
 if cicd is not None:
-    options.add_argument('window-size=1920x1080')
     max_retries = 3
+    max_clicks = 1
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(10)
@@ -132,7 +132,7 @@ def get(url=''):
     wait_document(20)
     browser.get(url)
 
-@retry(stop_max_attempt_number=1)
+@retry(stop_max_attempt_number=max_clicks)
 def click(xpath=None, css=None, id=None):
     wait_document(4)
     wait_ajax(1.25)
