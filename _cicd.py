@@ -156,6 +156,13 @@ def FindString(key,content):
     match = match.replace(key+'=','')
     return match
 
+# Up or downgrade chromedriver-py if necessary
+versionStr = subprocess.check_output(['google-chrome','--version'])
+chromeVer = re.search(r"\s[\.,\d]*\s", str(versionStr))
+chromeVer = chromeVer.group(0).strip()
+print("Chrome Version: "+str(chromeVer))
+os.system("pip install 'chromedriver-py<="+chromeVer+"' --force-reinstall")
+
 # Get from .env
 f = open(('.env'), 'r')
 env = f.read()
