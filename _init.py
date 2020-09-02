@@ -475,7 +475,7 @@ def type_tinymce(selector, value):
 def scan_regex(regex):
     # Laravel variables
     laravelFolders = [
-        'app', 'bootstrap', 'config', 'database', 'public', 'resources', 'routes'
+        'app', 'bootstrap', 'config', 'database', 'public', 'resources', 'routes', 'modules'
     ]
     laravelFiles = []
     failProject = 0
