@@ -696,10 +696,10 @@ def step(describe):
     global current_url
     global step_desc
     if browser.current_url != current_url:
-        wait_ajax(15)
+        wait_ajax(5)
     current_url = browser.current_url
     wait_document()
-    wait_ajax(3)
+    wait_ajax(2)
     step_desc = describe
     current_cmd = current_cmd + 1
     if describe is not None:
