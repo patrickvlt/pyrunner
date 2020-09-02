@@ -102,6 +102,7 @@ browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(1)
 browser.get('http://localhost')
 browser.maximize_window()
+current_url = browser.current_url
 
 # -----------------------------------------------------------
 # Functions which execute browser commands
@@ -114,6 +115,7 @@ test_time=datetime.now()
 failProject = None
 step_desc = None
 current_test = None
+current_url = None
 
 def wait_document(timeout=20):
     wait = WebDriverWait(browser, timeout)
@@ -689,10 +691,15 @@ def fetch_test_list(printTests=None, generateTests=None):
 # -----------------------------------------------------------
 
 def step(describe):
-    wait_ajax(3)
     global current_step
     global current_cmd
+    global current_url
     global step_desc
+    if browser.current_url != current_url:
+        wait_ajax(15)
+    current_url = browser.current_url
+    wait_document()
+    wait_ajax(3)
     step_desc = describe
     current_cmd = current_cmd + 1
     if describe is not None:
