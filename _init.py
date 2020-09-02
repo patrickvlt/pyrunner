@@ -61,6 +61,7 @@ cicd = None
 
 max_retries = 0
 max_clicks = 0
+implicitWait = 1
 
 for customArg in customArgs:
     for sysArg in sys.argv: 
@@ -133,8 +134,9 @@ def get(url=''):
     browser.get(url)
 
 @retry(stop_max_attempt_number=max_clicks)
-def click(xpath=None, css=None, id=None):
+def click(xpath=None, css=None, id=None, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     def Click(css, xpath, id):
         if css is not None:
             try:
@@ -223,8 +225,9 @@ def click(xpath=None, css=None, id=None):
     Click(css, xpath, id)
 
 @retry(stop_max_attempt_number=max_retries)
-def select2(selector=None, cmd=None):
+def select2(selector=None, cmd=None, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     try:
         if selector is not None and cmd is not None:
             print('Trying to execute command on select2 element(s): '+str(selector))
@@ -238,8 +241,9 @@ def select2(selector=None, cmd=None):
         raise TypeError("Can't execute select2 ("+str(cmd)+") on: "+str(selector)+".")
     
 @retry(stop_max_attempt_number=max_retries)
-def hover(selector=None):
+def hover(selector=None, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     try:
         if selector is not None:
             print('Trying to hover on: '+str(selector))
@@ -254,8 +258,9 @@ def hover(selector=None):
     time.sleep(1.5)
 
 @retry(stop_max_attempt_number=max_retries)
-def scroll_to(selector=None):
+def scroll_to(selector=None, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     try:
         if selector is not None:
             print('Trying to scroll to: '+str(selector))
@@ -276,40 +281,45 @@ def switch_tab(index):
 # Selecting
 
 @retry(stop_max_attempt_number=max_retries)
-def select_value_name(name, value):
+def select_value_name(name, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Selecting '+str(value)+' in '+str(name))
     browser.find_element_by_xpath(
         "//select[@name='"+name+"']/option[@value='"+value+"']").click()
 
 @retry(stop_max_attempt_number=max_retries)
-def select_index_name(name, index):
+def select_index_name(name, index, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Selecting '+str(index)+' in '+str(name))
     browser.find_element_by_xpath(
         "//select[@name='"+name+"']/option["+index+"]").click()
     
 @retry(stop_max_attempt_number=max_retries)
-def select_value_id(id, value):
+def select_value_id(id, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Selecting '+str(value)+' in '+str(id))
     browser.find_element_by_xpath(
         "//select[@id='"+id+"']/option[@value='"+value+"']").click()
 
 @retry(stop_max_attempt_number=max_retries)
-def select_index_id(id, index):
+def select_index_id(id, index, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Selecting '+str(index)+' in '+str(id))
     browser.find_element_by_xpath(
         "//select[@id='"+id+"']/option["+index+"]").click()
     
 @retry(stop_max_attempt_number=max_retries)
-def find_text(text):
+def find_text(text, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to find text: '+str(text))
     element = browser.find_element_by_xpath(
@@ -318,8 +328,9 @@ def find_text(text):
         return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_id(id):
+def find_id(id, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to find ID: '+str(id))
     element = browser.find_element_by_id(id)
@@ -329,8 +340,9 @@ def find_id(id):
         return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_class(el_class):
+def find_class(el_class, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to find class: '+str(el_class))
     element = browser.find_element_by_class_name(el_class)
@@ -340,8 +352,9 @@ def find_class(el_class):
         return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_css(css):
+def find_css(css, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to find css: '+str(css))
     element = browser.find_element_by_css_selector(css)
@@ -352,8 +365,9 @@ def find_css(css):
         return False
 
 @retry(stop_max_attempt_number=max_retries)
-def find_name(name):
+def find_name(name, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to find name: '+str(name))
     element = browser.find_element_by_name(name)
@@ -363,8 +377,9 @@ def find_name(name):
         return False
     
 @retry(stop_max_attempt_number=max_retries)
-def find_xpath(xpath):
+def find_xpath(xpath, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to find Xpath: '+str(xpath))
     element = browser.find_element_by_xpath(xpath)
@@ -376,64 +391,72 @@ def find_xpath(xpath):
 # Typing
 
 @retry(stop_max_attempt_number=max_retries)
-def type_xpath(xpath, value):
+def type_xpath(xpath, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
             print('Trying to type: '+str(value)+' in '+str(xpath))
     browser.find_element_by_xpath(xpath).send_keys(value)
 
 
 @retry(stop_max_attempt_number=max_retries)
-def type_name(name, value):
+def type_name(name, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(name))
     browser.find_element_by_name(name).send_keys(value)
 
 
 @retry(stop_max_attempt_number=max_retries)
-def type_id(id, value):
+def type_id(id, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(id))
     browser.find_element_by_id(id).send_keys(value)
 
 
 @retry(stop_max_attempt_number=max_retries)
-def type_css(css, value):
+def type_css(css, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(css))
     browser.find_element_by_css_selector(css).send_keys(value)
     
 # Clearing and Typing
 @retry(stop_max_attempt_number=max_retries)
-def change_text_xpath(xpath, value):
+def change_text_xpath(xpath, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(xpath))
     browser.find_element_by_xpath(xpath).clear()
     browser.find_element_by_xpath(xpath).send_keys(value)
     
 @retry(stop_max_attempt_number=max_retries)
-def change_text_name(name, value):
+def change_text_name(name, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(name))
     browser.find_element_by_name(name).clear()
     browser.find_element_by_name(name).send_keys(value)
     
 @retry(stop_max_attempt_number=max_retries)
-def change_text_id(id, value):
+def change_text_id(id, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         print('Trying to type: '+str(value)+' in '+str(id))
     browser.find_element_by_id(id).clear()
     browser.find_element_by_id(id).send_keys(value)
     
 @retry(stop_max_attempt_number=max_retries)
-def change_text_css(css, value):
+def change_text_css(css, value, timeout = implicitWait):
     wait_document()
+    browser.implicitly_wait(timeout)
     if debug is not None:
         browser.find_element_by_css_selector(css).clear()
         browser.find_element_by_css_selector(css).send_keys(value)
@@ -665,7 +688,7 @@ def fetch_test_list(printTests=None, generateTests=None):
 # -----------------------------------------------------------
 
 def step(describe):
-    wait_document()
+    wait_ajax(3)
     global current_step
     global current_cmd
     global step_desc
