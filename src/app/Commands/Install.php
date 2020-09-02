@@ -51,9 +51,11 @@ class Install extends Command
                 if ($returnTwo != 0) {
                     $console->error('Installing requirements failed. Please run: pip(3) install -r https://raw.githubusercontent.com/43874/pyrunner/master/requirements/requirements.txt');
                 } else {
+                    exec('pip3 install chromedriver-py --force-reinstall', $output, $return);
                     $console->info('Succesfully installed Pyrunner requirements.');
                 }
             } else {
+                exec('pip install chromedriver-py --force-reinstall', $output, $return);
                 $console->info('Succesfully installed Pyrunner requirements.');
             }
             if ($console->confirm('Do you want to copy an example file with Pyrunner tests to your project root?')){
