@@ -119,7 +119,6 @@ docker pull registry.gitlab.com/(group)/(repository)
 # Tests
 # -----------------------------------------------------------
         
-@pr.retry(stop_max_attempt_number=max_test_retries)
 def users_can_login():
     pr.start('Users Can Login') # Prints start of test
     pr.step('Logout first') # Prints current step being executed
