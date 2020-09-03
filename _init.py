@@ -59,9 +59,9 @@ shell = None
 debug = None
 cicd = None
 
-max_retries = 0
-max_clicks = 0
-implicitWait = 1
+max_retries = 2
+max_clicks = 1
+implicitWait = 2
 
 for customArg in customArgs:
     for sysArg in sys.argv: 
@@ -109,6 +109,7 @@ current_url = browser.current_url
 # -----------------------------------------------------------
     
 current_step = 0
+step_for_ss = 0
 current_cmd = 0
 describe = None
 test_time=datetime.now()
@@ -139,7 +140,7 @@ def get(url=''):
 @retry(stop_max_attempt_number=max_clicks)
 def click(xpath=None, css=None, id=None, timeout = implicitWait):
     wait_document()
-    browser.implicitly_wait(timeout)
+    browser.implicitly_wait(10)
     def Click(css, xpath, id):
         if css is not None:
             try:
@@ -241,6 +242,7 @@ def select2(selector=None, cmd=None, timeout = implicitWait):
     except:
         if selector is not None and cmd is not None:
             print(Fore.RED+'Select2 cmd execution failed: ' + str(selector)+Style.RESET_ALL)
+        time.sleep(1)
         raise TypeError("Can't execute select2 ("+str(cmd)+") on: "+str(selector)+".")
     
 @retry(stop_max_attempt_number=max_retries)
@@ -349,10 +351,15 @@ def find_class(el_class, timeout = implicitWait):
     if debug is not None:
         print('Trying to find class: '+str(el_class))
     element = browser.find_element_by_class_name(el_class)
-    if element.is_displayed() is True:
-        print('Found class: '+el_class)
-    else:
-        return False
+    @retry(stop_max_attempt_number=timeout)
+    def Visible():
+        if element.is_displayed() is True:
+            if debug is not None:
+                print('Found class: '+el_class)
+        else:
+            time.sleep(1)
+            raise TypeError('This element was found but not visible: '+el_class)
+    Visible()
 
 @retry(stop_max_attempt_number=max_retries)
 def find_css(css, timeout = implicitWait):
@@ -361,11 +368,15 @@ def find_css(css, timeout = implicitWait):
     if debug is not None:
         print('Trying to find css: '+str(css))
     element = browser.find_element_by_css_selector(css)
-    if element.is_displayed() is True:
-        if debug is not None:
-            print('Found CSS: '+css)
-    else:
-        return False
+    @retry(stop_max_attempt_number=timeout)
+    def Visible():
+        if element.is_displayed() is True:
+            if debug is not None:
+                print('Found CSS: '+css)
+        else:
+            time.sleep(1)
+            raise TypeError('This element was found but not visible: '+css)
+    Visible()
 
 @retry(stop_max_attempt_number=max_retries)
 def find_name(name, timeout = implicitWait):
@@ -374,10 +385,15 @@ def find_name(name, timeout = implicitWait):
     if debug is not None:
         print('Trying to find name: '+str(name))
     element = browser.find_element_by_name(name)
-    if element.is_displayed() is True:
-        print('Found name: '+name)
-    else:
-        return False
+    @retry(stop_max_attempt_number=timeout)
+    def Visible():
+        if element.is_displayed() is True:
+            if debug is not None:
+                print('Found name: '+name)
+        else:
+            time.sleep(1)
+            raise TypeError('This element was found but not visible: '+name)
+    Visible()
     
 @retry(stop_max_attempt_number=max_retries)
 def find_xpath(xpath, timeout = implicitWait):
@@ -386,10 +402,15 @@ def find_xpath(xpath, timeout = implicitWait):
     if debug is not None:
         print('Trying to find Xpath: '+str(xpath))
     element = browser.find_element_by_xpath(xpath)
-    if element.is_displayed() is True:
-        print('Found XPath: '+xpath)
-    else:
-        return False
+    @retry(stop_max_attempt_number=timeout)
+    def Visible():
+        if element.is_displayed() is True:
+            if debug is not None:
+                print('Found Xpath: '+xpath)
+        else:
+            time.sleep(1)
+            raise TypeError('This element was found but not visible: '+xpath)
+    Visible()
 
 # Typing
 
@@ -695,16 +716,18 @@ def step(describe):
     global current_cmd
     global current_url
     global step_desc
+    global step_for_ss
     if browser.current_url != current_url:
         wait_ajax(5)
     current_url = browser.current_url
     wait_document()
     wait_ajax(2)
     step_desc = describe
+    step_for_ss = current_cmd
     current_cmd = current_cmd + 1
     if describe is not None:
         if shell is not None or cicd is not None:
-            browser.save_screenshot('pyrunner/'+str(current_cmd)+' - '+describe+'.png')
+            browser.save_screenshot('pyrunner/'+str(step_for_ss)+' - '+describe+'.png')
         if debug is not None:
             print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
         current_step = current_step + 1
@@ -767,8 +790,8 @@ def failed(failedTests):
         print('----------------------------------------------------------------------------------------------------')
         for failed in failedTests:
             print(' ')
-            print(Style.RESET_ALL+'Failed test: '+Fore.RED+str(failed['test']))
-            print(Style.RESET_ALL+'Error: '+Fore.RED+str(failed['error']))
+            print(Style.RESET_ALL+'Failed test at step '+str(failed['step'])+': '+Fore.RED+str(failed['name'])+Style.RESET_ALL)
+            print(Style.RESET_ALL+'Error: '+Fore.RED+str(failed['error'])+Style.RESET_ALL)
             print(' ')
         print(' ')
         try:
