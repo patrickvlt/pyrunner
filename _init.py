@@ -53,11 +53,13 @@ customArgs.append('--dev')
 customArgs.append('--debug')
 customArgs.append('--shell')
 customArgs.append('--cicd')
+customArgs.append('--screenshots')
 
 dev = None
 shell = None
 debug = None
 cicd = None
+screenshots = None
 
 max_retries = 2
 max_clicks = 1
@@ -73,6 +75,8 @@ for customArg in customArgs:
             debug = True
         if sysArg == '--cicd':
             cicd = True
+        if sysArg == '--screenshots':
+            screenshots = True
 
 if shell is not None:
     print('Executing PyRunner in shell')
@@ -726,7 +730,7 @@ def step(describe):
     step_for_ss = current_cmd
     current_cmd = current_cmd + 1
     if describe is not None:
-        if shell is not None or cicd is not None:
+        if screenshots is not None:
             browser.save_screenshot('pyrunner/'+str(step_for_ss)+' - '+describe+'.png')
         if debug is not None:
             print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
@@ -795,11 +799,12 @@ def failed(failedTests):
             print(' ')
         print(' ')
         try:
-            browser.save_screenshot('pyrunner/failed_state.png')
+            if screenshots is not None:
+                browser.save_screenshot('pyrunner/failed_state.png')
         except Exception as e:
             print(e)
         time.sleep(5)
-        if cicd is not None or shell is not None:
+        if cicd is not None:
             try:
                 with ZipFile('pyrunner.zip', 'w') as zipObj:
                 # Iterate over all the files in directory              

@@ -179,9 +179,9 @@ if record is not None:
     os.system("killall -r xvfb")
     os.system("killall -r ffmpeg")
     os.system('sudo find . -name "*record.mkv*"')
-    exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --cicd")
+    exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --cicd --screenshots")
 else:
-    exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --shell --cicd")
+    exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --shell --cicd --screenshots")
     
 if exit_code > 0:
     TestFailed()
