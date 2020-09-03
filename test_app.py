@@ -64,9 +64,9 @@ def RunTests():
                 exec(cmd)
             except Exception as e:
                 if pr.screenshots is not None:
-                    pr.browser.save_screenshot('pyrunner/failed_'+str(pr.step_for_ss)+' - '+str(definedTest)+'.png')
+                    pr.browser.save_screenshot('pyrunner/failed_step_'+str(pr.current_step)+'.png')
                 print(' ')
-                print(pr.Style.RESET_ALL+'Failed at step '+str(pr.step_for_ss)+': '+pr.Fore.RED+str(pr.current_test)+pr.Style.RESET_ALL)
+                print(pr.Style.RESET_ALL+'Failed at step '+str(pr.current_step)+': '+pr.Fore.RED+str(pr.current_test)+pr.Style.RESET_ALL)
                 print(pr.Style.RESET_ALL+'Error: '+pr.Fore.RED+str(e)+pr.Style.RESET_ALL)
                 print(' ')
                 print(' ')
@@ -74,7 +74,7 @@ def RunTests():
                     'test': definedTest,
                     'name': pr.current_test,
                     'error': e,
-                    'step': pr.step_for_ss,
+                    'step': pr.current_step,
                 })
                 pass
         exit
@@ -83,8 +83,6 @@ def RunTests():
     else:
         if pr.dev is not None:
             for failed in failedTests:
-                if pr.screenshots is not None:
-                    pr.browser.save_screenshot('pyrunner/failed_'+str(pr.step_for_ss)+' - '+str(failed['test'])+'.png')
                 print(' ')
                 print(pr.Style.RESET_ALL+'Failed test at step '+str(failed['step'])+': '+pr.Fore.RED+str(failed['name'])+pr.Style.RESET_ALL)
                 print(pr.Style.RESET_ALL+'Error: '+pr.Fore.RED+str(failed['error'])+pr.Style.RESET_ALL)

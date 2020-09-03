@@ -113,8 +113,6 @@ current_url = browser.current_url
 # -----------------------------------------------------------
     
 current_step = 0
-step_for_ss = 0
-current_cmd = 0
 describe = None
 test_time=datetime.now()
 failProject = None
@@ -717,21 +715,17 @@ def fetch_test_list(printTests=None, generateTests=None):
 
 def step(describe):
     global current_step
-    global current_cmd
     global current_url
     global step_desc
-    global step_for_ss
     if browser.current_url != current_url:
         wait_ajax(5)
     current_url = browser.current_url
     wait_document()
     wait_ajax(2)
     step_desc = describe
-    step_for_ss = current_cmd
-    current_cmd = current_cmd + 1
     if describe is not None:
         if screenshots is not None:
-            browser.save_screenshot('pyrunner/'+str(step_for_ss)+' - '+describe+'.png')
+            browser.save_screenshot('pyrunner/'+str(current_step)+' - '+describe+'.png')
         if debug is not None:
             print(Fore.CYAN+str(current_step)+': '+describe+Style.RESET_ALL)
         current_step = current_step + 1
@@ -798,11 +792,6 @@ def failed(failedTests):
             print(Style.RESET_ALL+'Error: '+Fore.RED+str(failed['error'])+Style.RESET_ALL)
             print(' ')
         print(' ')
-        try:
-            if screenshots is not None:
-                browser.save_screenshot('pyrunner/failed_state.png')
-        except Exception as e:
-            print(e)
         time.sleep(5)
         if cicd is not None:
             try:
