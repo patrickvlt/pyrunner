@@ -24,12 +24,19 @@ Prepare your (test) database:
 php artisan migrate:fresh --seed (--database=mysql_testing)
 ```
 
-Launch PyRunner to serve your project or run the tests:
+Launch PyRunner in a new terminal:
 ```
-php artisan pyrunner:start
+php artisan pyrunner:start (--dev) (--debug) (--shell) (--screenshots)
 ```
 
-## Development
+Launch PyRunner in your active terminal:
+```
+python vendor/pveltrop/pyrunner/test_app.py (--dev) (--debug) (--shell) (--screenshots)
+```
+
+## Parameters
+
+<h4>Development (--dev)</h4>
 
 ```
 php artisan pyrunner:start --dev
@@ -64,13 +71,21 @@ Then:
 ipdb> test.nameoftest()
 ```
 
-# Debug
+<h4>Debug (--debug)</h4>
 
 ```
 php artisan pyrunner:start --debug
 ```
 
 This option will enable more specific output during test command executions. This can be helpful to pinpoint where PyRunner is struggling.
+
+<h4>Screenshots (--screenshots)</h4>
+
+```
+php artisan pyrunner:start --screenshots
+```
+
+This option will enable screenshots. Screenshots will be made whenever you define a new step (pr.step()).
 
 # ENV
 
