@@ -78,7 +78,7 @@ This option will enable more specific output during test command executions. Thi
 php artisan pyrunner:env
 ```
 
-This option will generate a .env.example and .env.testing. Change values you want or dont want in source control.
+This option will generate a .env.example and .env.testing. Change values you want or dont want in version control.
 
 ### Configure for Laravel
 
