@@ -63,7 +63,7 @@ screenshots = None
 
 max_retries = 2
 max_clicks = 1
-implicitWait = 2
+implicitWait = 10
 
 for customArg in customArgs:
     for sysArg in sys.argv: 
@@ -100,7 +100,7 @@ else:
 if cicd is not None:
     max_retries = 2
     max_clicks = 1
-    implicitWait = 4
+    implicitWait = 30
     
 browser = webdriver.Chrome(executable_path=binary_path,options=options)
 browser.implicitly_wait(1)
