@@ -63,7 +63,7 @@ ipdb> RunTests()
 
 If you want to re-run a single test, first literally enter:
 ```
-ipdb> reload(test)
+ipdb> reload(tests)
 ```
 This will reload your _tests.py file.
 Then:
