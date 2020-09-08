@@ -68,7 +68,7 @@ ipdb> reload(tests)
 This will reload your _tests.py file.
 Then:
 ```
-ipdb> test.nameoftest()
+ipdb> tests.nameoftest()
 ```
 
 <h4>Debug (--debug)</h4>
