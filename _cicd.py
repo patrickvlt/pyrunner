@@ -130,20 +130,24 @@ def TestSucceeded():
             
 # Prepare Laravel
 try:
-    ComposerMigrate = 'composer install; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
-    NPM = 'npm install'
-    # ChromeDriver = 'wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; sudo dpkg -i google-chrome-stable_current_amd64.deb; google-chrome --version; sudo apt-get install -f -y cpulimit'
-
-    jobs = [ComposerMigrate, NPM]
-
-    ps = []
-
-    for job in jobs:
-        p = subprocess.Popen([job],shell=True)
-        ps.append(p)
-
-    for p in ps:
-        p.wait()
+    
+#     ComposerMigrate = 'composer install; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
+#     NPM = 'npm install'
+#     jobs = [ComposerMigrate, NPM]
+#     ps = []
+#     for job in jobs:
+#         p = subprocess.Popen([job],shell=True)
+#         ps.append(p)
+#     for p in ps:
+#         p.wait()
+        
+    os.system('composer install')
+    os.system('php artisan key:generate')
+    os.system('php artisan config:clear')
+    os.system('php artisan migrate')
+    os.system('php artisan migrate:rollback')
+    os.system('php artisan migrate:fresh --seed')
+    os.system('npm install')
     
 except Exception as e:
     print(e)
