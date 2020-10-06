@@ -55,6 +55,7 @@ def DevMode():
 def RunTests():
     try:
         reload(tests)
+        failedTests = []
     except:
         print('')
     for definedTest in testList:
