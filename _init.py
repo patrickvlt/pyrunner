@@ -62,7 +62,7 @@ debug = None
 cicd = None
 screenshots = None
 
-max_retries = 2
+max_retries = 1
 max_clicks = 1
 implicitWait = 10
 
