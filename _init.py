@@ -506,6 +506,13 @@ def type_tinymce(selector, value):
         print('Trying to type: '+str(value)+' in TinyMCE with selector: '+str(selector))
     print("tinymce.get(\""+str(selector)+"\").setContent(\""+str(value)+"\", {format: \"raw\"});")
     browser.execute_script("tinymce.get(\""+str(selector)+"\").setContent(\""+str(value)+"\", {format: \"raw\"});")
+    
+@retry(stop_max_attempt_number=max_retries)
+def slider(selector, offsetOne, offsetTwo):
+    wait_document()
+    slider = browser.find_element_by_css_selector(str(selector))
+    move = ActionChains(browser)
+    move.click_and_hold(slider).move_by_offset(offsetOne, offsetTwo).release().perform()
 
 
 # -----------------------------------------------------------
