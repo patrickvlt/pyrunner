@@ -9,7 +9,7 @@ import pathlib
 from pushbullet import Pushbullet
 
 customArgs = []
-customArgs.append('-r')
+customArgs.append('--record')
 customArgs.append('--project=')
 customArgs.append('--url=')
 customArgs.append('--branch=')
@@ -50,8 +50,11 @@ for customArg in customArgs:
                 thisPbchannel = val
             if cmd == '--slack':
                 thisSlack = val
-            if cmd == '-r':
-                record = True
+                
+for customArg in customArgs:
+    for sysArg in sys.argv:
+        if sysArg == '--record':
+            record = True
 
 setup = 1
 
@@ -173,12 +176,15 @@ env = f.read()
 WEB_URL = FindString("APP_URL",env)
 SERVE_URL = FindString("APP_URL",env).split('//')[-1]
 
+print(WEB_URL)
+print(SERVE_URL)
+
 # Serve project
 os.system("php artisan serve --port=80 --host=localhost &")
 
 # Recording and running
 if record is not None:
-    os.system("sleep 1; cpulimit -l 10 ffmpeg -r 15 -f x11grab -draw_mouse 0 -s 1920x1080 -i :99 -c:v libvpx -quality realtime -cpu-used 0 -b:v 384k -qmin 42 -qmax 42 -maxrate 200k -bufsize 1000k -an record.mkv &")
+    os.system("sleep 1; ffmpeg -r 30 -f x11grab -draw_mouse 0 -s 1920x1080 -i :99 -c:v libvpx -quality realtime -cpu-used 0 -b:v 384k -qmin 42 -qmax 42 -maxrate 200k -bufsize 1000k -an record.mkv &")
     exit_code = os.system("xvfb-run --server-num 99 --auth-file /tmp/xvfb.auth -s '-ac -screen 0 1920x1080x24' python vendor/pveltrop/pyrunner/test_app.py --debug --cicd")
     os.system("killall -r xvfb")
     os.system("killall -r ffmpeg")
