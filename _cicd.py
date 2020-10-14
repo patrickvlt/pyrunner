@@ -132,15 +132,19 @@ def TestSucceeded():
     exit()
 
 # Prepare Laravel
-exit_code = os.system('composer install')
-exit_code = os.system('php artisan key:generate')
-exit_code = os.system('php artisan config:clear')
-exit_code = os.system('php artisan migrate')
-exit_code = os.system('php artisan migrate:rollback')
-exit_code = os.system('php artisan migrate:fresh --seed')
-exit_code = os.system('npm install')
-
-if exit_code > 0:
+if os.system('composer install') > 0:
+    TestFailed()
+if os.system('php artisan key:generate') > 0:
+    TestFailed()
+if os.system('php artisan config:clear') > 0:
+    TestFailed()
+if os.system('php artisan migrate') > 0:
+    TestFailed()
+if os.system('php artisan migrate:rollback') > 0:
+    TestFailed()
+if os.system('php artisan migrate:fresh --seed') > 0:
+    TestFailed()
+if os.system('npm install') > 0:
     TestFailed()
 
 def FindString(key,content):
