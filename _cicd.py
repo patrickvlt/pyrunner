@@ -50,7 +50,7 @@ for customArg in customArgs:
                 thisPbchannel = val
             if cmd == '--slack':
                 thisSlack = val
-                
+
 for customArg in customArgs:
     for sysArg in sys.argv:
         if sysArg == '--record':
@@ -112,7 +112,7 @@ if thisPushbullet is not None and thisPbchannel is not None:
     for channel in pb.channels:
         if str(thisPbchannel) in str(channel):
             pushbullet = channel
-            
+
 # Returns exit code for GitLab and sends message to Slack or Pushbullet
 def TestFailed():
     print("Test Failed")
@@ -122,7 +122,7 @@ def TestFailed():
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+fail_msg+'"}')
     sys.exit(1)
     exit()
-    
+
 def TestSucceeded():
     if thisPushbullet is not None and thisPbchannel is not None:
         pushbullet.push_link(thisProject+": Testing Succeeded", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
@@ -130,32 +130,19 @@ def TestSucceeded():
         slack = requests.post(thisSlack, headers=headers, data='{"text":"'+succeed_msg+'"}')
     sys.exit(0)
     exit()
-            
+
 # Prepare Laravel
-try:
-    
-#     ComposerMigrate = 'composer install; php artisan key:generate; php artisan config:clear; php artisan migrate; php artisan migrate:rollback; php artisan migrate:fresh --seed'
-#     NPM = 'npm install'
-#     jobs = [ComposerMigrate, NPM]
-#     ps = []
-#     for job in jobs:
-#         p = subprocess.Popen([job],shell=True)
-#         ps.append(p)
-#     for p in ps:
-#         p.wait()
-        
-    os.system('composer install')
-    os.system('php artisan key:generate')
-    os.system('php artisan config:clear')
-    os.system('php artisan migrate')
-    os.system('php artisan migrate:rollback')
-    os.system('php artisan migrate:fresh --seed')
-    os.system('npm install')
-    
-except Exception as e:
-    print(e)
+exit_code = os.system('composer install')
+exit_code = os.system('php artisan key:generate')
+exit_code = os.system('php artisan config:clear')
+exit_code = os.system('php artisan migrate')
+exit_code = os.system('php artisan migrate:rollback')
+exit_code = os.system('php artisan migrate:fresh --seed')
+exit_code = os.system('npm install')
+
+if exit_code > 0:
     TestFailed()
-    
+
 def FindString(key,content):
     regex = r""+key+"=.*"
     match = re.search(regex, content)
@@ -192,7 +179,7 @@ if record is not None:
     os.system('sudo find . -name "*record.mkv*"')
 else:
     exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --shell --cicd --screenshots")
-    
+
 if exit_code > 0:
     TestFailed()
 else:
