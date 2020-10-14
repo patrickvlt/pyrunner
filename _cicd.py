@@ -167,9 +167,6 @@ env = f.read()
 WEB_URL = FindString("APP_URL",env)
 SERVE_URL = FindString("APP_URL",env).split('//')[-1]
 
-print(WEB_URL)
-print(SERVE_URL)
-
 # Serve project
 os.system("php artisan serve --port=80 --host=localhost &")
 
