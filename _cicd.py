@@ -6,57 +6,26 @@ import requests
 import subprocess
 import re
 import pathlib
-from pushbullet import Pushbullet
 
 customArgs = []
 customArgs.append('--record')
-customArgs.append('--project=')
-customArgs.append('--url=')
-customArgs.append('--branch=')
-customArgs.append('--author=')
-customArgs.append('--pushbullet=')
-customArgs.append('--slack=')
-customArgs.append('--pbchannel=')
+customArgs.append('--pyrunner')
+customArgs.append('--phpunit')
 
-thisProject = None
-thisUrl = None
-thisBranch = None
-thisAuthor = None
-thisPushbullet = None
-thisSlack = None
-thisPbchannel = None
+Pyrunner = None
+PHPunit = None
 record = None
-
-for customArg in customArgs:
-    for sysArg in sys.argv:
-        sysArg = sysArg.split('=')
-        cmd = sysArg[0]
-        try:
-            val = sysArg[1]
-        except:
-            continue
-        if cmd in customArg:
-            if cmd == '--project':
-                thisProject = val
-            if cmd == '--url':
-                thisUrl = val
-            if cmd == '--branch':
-                thisBranch = val
-            if cmd == '--author':
-                thisAuthor = val
-            if cmd == '--pushbullet':
-                thisPushbullet = val
-            if cmd == '--pbchannel':
-                thisPbchannel = val
-            if cmd == '--slack':
-                thisSlack = val
 
 for customArg in customArgs:
     for sysArg in sys.argv:
         if sysArg == '--record':
             record = True
-
-setup = 1
+        if sysArg == '--pyrunner':
+            Pyrunner = True
+        if sysArg == '--phpunit':
+            PHPunit = True
+        if sysArg == '--install':
+            installProject = True
 
 def FindYML(key,content):
     regex = r""+key+": .*"
@@ -78,6 +47,16 @@ def FindENV(key,content):
     match = match.group()
     return match
 
+# Returns exit code for GitLab
+def TestFailed():
+    sys.exit(1)
+    exit()
+
+def TestSucceeded():
+    sys.exit(0)
+    exit()
+
+# Prepare Laravel
 # Overwrite DB_DATABASE in the .env with the one from the .yml
 os.system("sudo service redis-server start")
 os.system("redis-cli --version")
@@ -103,34 +82,6 @@ open_file = open('.env', "wt")
 open_file.write(newContent)
 open_file.close()
 
-# Sets up the Jottenheijm channel for Pushbullet and Slack
-headers = {'Content-type': 'application/json', }
-fail_msg = thisProject+": Testing branch failed: "+thisBranch+" by "+thisAuthor+" --> "+thisUrl+""
-succeed_msg = thisProject+": Testing branch succeeded: "+thisBranch+" by "+thisAuthor+" --> "+thisUrl+""
-if thisPushbullet is not None and thisPbchannel is not None:
-    pb = Pushbullet(thisPushbullet)
-    for channel in pb.channels:
-        if str(thisPbchannel) in str(channel):
-            pushbullet = channel
-
-# Returns exit code for GitLab and sends message to Slack or Pushbullet
-def TestFailed():
-    print("Test Failed")
-    if thisPushbullet is not None and thisPbchannel is not None:
-        pushbullet.push_link(thisProject+": Testing Failed", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
-    if thisSlack is not None:
-        slack = requests.post(thisSlack, headers=headers, data='{"text":"'+fail_msg+'"}')
-    sys.exit(1)
-    exit()
-
-def TestSucceeded():
-    if thisPushbullet is not None and thisPbchannel is not None:
-        pushbullet.push_link(thisProject+": Testing Succeeded", thisUrl, "Author: " + thisAuthor + " (" + thisBranch + ")")
-    if thisSlack is not None:
-        slack = requests.post(thisSlack, headers=headers, data='{"text":"'+succeed_msg+'"}')
-    sys.exit(0)
-    exit()
-
 # Prepare Laravel
 if os.system('composer install') > 0:
     TestFailed()
@@ -146,44 +97,43 @@ if os.system('php artisan migrate:fresh --seed') > 0:
     TestFailed()
 if os.system('npm install') > 0:
     TestFailed()
+    
 
-def FindString(key,content):
-    regex = r""+key+"=.*"
-    match = re.search(regex, content)
-    match = match.group()
-    match = match.replace(key+'=','')
-    return match
+# This will change if tests fail
+exit_code = 1
 
-# Up or downgrade chromedriver-py if necessary
-versionStr = subprocess.check_output(['google-chrome','--version'])
-chromeVer = re.search(r"\s[\.,\d]*\s", str(versionStr))
-chromeVer = chromeVer.group(0).strip()
-print("Chrome Version: "+str(chromeVer))
-os.system("pip install 'chromedriver-py<="+chromeVer+"' --force-reinstall")
+def LaunchPyrunner():
+    # Up or downgrade chromedriver-py if necessary
+    versionStr = subprocess.check_output(['google-chrome','--version'])
+    chromeVer = re.search(r"\s[\.,\d]*\s", str(versionStr))
+    chromeVer = chromeVer.group(0).strip()
+    print("Chrome Version: "+str(chromeVer))
+    os.system("pip install 'chromedriver-py<="+chromeVer+"' --force-reinstall")
 
-# Get from .env
-f = open(('.env'), 'r')
-env = f.read()
-WEB_URL = FindString("APP_URL",env)
-SERVE_URL = FindString("APP_URL",env).split('//')[-1]
+    # Serve project
+    os.system("php artisan serve --port=80 --host=localhost &")
+    
+    # Recording and running
+    if record is not None:
+        print("Launching PyRunner with recording")
+        os.system("sleep 1; ffmpeg -r 30 -f x11grab -draw_mouse 0 -s 1920x1080 -i :99 -c:v libvpx -quality realtime -cpu-used 0 -b:v 384k -qmin 42 -qmax 42 -maxrate 200k -bufsize 1000k -an record.mkv -nostdin &")
+        exit_code = os.system("xvfb-run --server-num 99 --auth-file /tmp/xvfb.auth -s '-ac -screen 0 1920x1080x24' python vendor/pveltrop/pyrunner/test_app.py --debug --cicd")
+        os.system("killall -r xvfb")
+        os.system("killall -r ffmpeg")
+        os.system('sudo find . -name "*record.mkv*"')
+    else:
+        return os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --shell --cicd --screenshots")
+        
+def LaunchPHPUnit():
+    return os.system("vendor/bin/phpunit --coverage-html reports/")
 
-# Serve project
-os.system("php artisan serve --port=80 --host=localhost &")
-
-# Recording and running
-if record is not None:
-    print("Launching PyRunner with recording")
-    os.system("sleep 1; ffmpeg -r 30 -f x11grab -draw_mouse 0 -s 1920x1080 -i :99 -c:v libvpx -quality realtime -cpu-used 0 -b:v 384k -qmin 42 -qmax 42 -maxrate 200k -bufsize 1000k -an record.mkv -nostdin &")
-    exit_code = os.system("xvfb-run --server-num 99 --auth-file /tmp/xvfb.auth -s '-ac -screen 0 1920x1080x24' python vendor/pveltrop/pyrunner/test_app.py --debug --cicd")
-    os.system("killall -r xvfb")
-    os.system("killall -r ffmpeg")
-    os.system('sudo find . -name "*record.mkv*"')
-else:
-    exit_code = os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --shell --cicd --screenshots")
-
+if Pyrunner is not None:
+    exit_code = LaunchPyrunner()
+    
+if PHPunit is not None:
+    exit_code = LaunchPHPUnit()
+    
 if exit_code > 0:
-    TestFailed()
+    sys.exit(1)
 else:
-    TestSucceeded()
-
-exit()
+    sys.exit(0)
