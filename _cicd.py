@@ -125,7 +125,7 @@ def LaunchPyrunner():
         return os.system("python vendor/pveltrop/pyrunner/test_app.py --debug --shell --cicd --screenshots")
         
 def LaunchPHPUnit():
-    return os.system("vendor/bin/phpunit --coverage-html reports/")
+    return os.system("XDEBUG_MODE=coverage vendor/bin/phpunit --colors --debug --coverage-html reports/")
 
 if Pyrunner is not None:
     exit_code = LaunchPyrunner()
