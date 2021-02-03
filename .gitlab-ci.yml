@@ -15,7 +15,26 @@ variables:
 stages:
   - test
 
-Testing App:
+PHPunit (unit tests):
+  stage: test
+  only:
+    - merge_requests
+
+  script:
+    - composer install
+    - locale -a
+    - python vendor/pveltrop/pyrunner/_cicd.py --phpunit
+
+  artifacts:
+    when: on_failure
+    name: "${CI_BUILD_STAGE}_${CI_BUILD_REF_NAME}_FAILED"
+    paths:
+      - "storage/logs/laravel.log"
+      - ".env"
+    untracked: false
+    expire_in: 1 day
+
+Pyrunner (browser tests):
   stage: test
   only:
     - merge_requests
@@ -32,7 +51,7 @@ Testing App:
   script:
     - composer install
     - locale -a
-    - python vendor/pveltrop/pyrunner/_cicd.py --project=${CI_PROJECT_TITLE} --url=${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHA} --branch=${CI_COMMIT_REF_NAME} --author=${GITLAB_USER_EMAIL} --pushbullet=${PUSHBULLET} --slack=${SLACK} --pbchannel=${PBCHANNEL}
+    - python vendor/pveltrop/pyrunner/_cicd.py --pyrunner
 
   artifacts:
     when: on_failure
@@ -40,5 +59,7 @@ Testing App:
     paths:
       - "pyrunner.zip"
       - "record.mkv"
+      - ".env"
+      - "storage/logs/laravel.log"
     untracked: false
     expire_in: 1 day
