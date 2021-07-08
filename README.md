@@ -1,3 +1,15 @@
+![image](https://user-images.githubusercontent.com/43636101/124980975-4fb3bd00-e035-11eb-9c40-aa8737b9d60c.png)
+
+
+## About PyRunner
+
+Pyrunner is a python package, which can run browser tests for Laravel applications. Pyrunner currently features:
+
+- Interactively develop browser tests with the development mode
+- Log and make screenshots of each step
+- Retry failed test automatically as many times as you want
+- Easy to use in CICD, less prone to crashes than Laravel Dusk
+
 # Usage
 
 Install Python: https://www.python.org/downloads/release/python-381/
